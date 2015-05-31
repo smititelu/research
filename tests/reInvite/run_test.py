@@ -1,40 +1,34 @@
-import subprocess
+import sys
 
-ITER = 10
+sys.path.append("/home/miti/git/research/tests/")
 
-BASE_PORT = 9999
-BASE_USER = "user"
+import helps
+import defs
 
-SIP_PROTO= "sip"
-SIPS_PROTO= "sips"
+# check if given number of calls is given as argument
+if len(sys.argv) > 1:
+    try:
+        calls = int(sys.argv[1])
+    except Exception:
+        print("Usage: sudo python run_test.py [nr_calls]")
+        exit()
+else:
+    calls = defs.BASE_CALLS
 
-DIR_SIPSAK = "msg/"
-DIR_SIPP = "xml/"
+# start SIPp UAS in background
+#subprocess.call("sipp -bg -sf " + BASE_DIR_SIPP + UAS_FILE, shell=True)
 
-INVITE_FILE = "invite.msg"
-BYE_FILE = "bye.msg"
+# prepare files to be used by sipsak for sending SIP msg
+helps.msg_files_pre(calls, defs.BASE_DIR_SIPSAK, defs.BASE_INVITE_FILE)
+helps.msg_files_pre(calls, defs.BASE_DIR_SIPSAK, defs.BASE_REINVITE_FILE)
+helps.msg_files_pre(calls, defs.BASE_DIR_SIPSAK, defs.BASE_BYE_FILE)
 
-BASE_INVITE_FILE = "invite.msg"
-BASE_BYE_FILE = "bye.msg"
+# send SIP msg using sipsak and the files prepared above
+helps.msg_files_send(calls, defs.BASE_DIR_SIPSAK, defs.BASE_INVITE_FILE, defs.BASE_NUMBER, defs.BASE_PORT)
+helps.msg_files_send(calls, defs.BASE_DIR_SIPSAK, defs.BASE_REINVITE_FILE, defs.BASE_NUMBER, defs.BASE_PORT)
+helps.msg_files_send(calls, defs.BASE_DIR_SIPSAK, defs.BASE_BYE_FILE, defs.BASE_NUMBER, defs.BASE_PORT)
 
-subprocess.call(["ls", "-l"])
-
-def msg_format(index, fin, fout):
-    subprocess.call("cat " +  DIR_SIPSAK + INVITE_FILE +                " | " +
-                    "sed s/call_id/call_id" + str(index) + "/" +        " | " +
-                    "sed s/service/" + BASE_USER + str(index) + "/" +   " > " +
-                    fout, shell=True)
-
-for i in range(1, ITER):
-    proto   = SIP_PROTO
-    port    = BASE_PORT + i
-    user    = BASE_USER + str(i)
-    fin     = DIR_SIPSAK + INVITE_FILE
-    fout    = DIR_SIPSAK + INVITE_FILE + str(i)
-
-    msg_format(i, fin, fout)
-    subprocess.call(["sipsak",
-                     "-vv",
-                     "-l", str(port),
-                     "-s", proto + ":" + user + "@" + "127.0.1.1",
-                     "-f", fout])
+# delete files used by sipsak for sending SIP msg
+helps.msg_files_pos(calls, defs.BASE_DIR_SIPSAK, defs.BASE_INVITE_FILE)
+helps.msg_files_pos(calls, defs.BASE_DIR_SIPSAK, defs.BASE_REINVITE_FILE)
+helps.msg_files_pos(calls, defs.BASE_DIR_SIPSAK, defs.BASE_BYE_FILE)
