@@ -26,6 +26,26 @@ def get_ip_addr(ifname):
     return ip
 
 
+'''
+Start SIPp server
+'''
+def sipp_uas_start(fname):
+    subprocess.call([
+                    "sipp",
+                    "-sn", "uas",
+                    "-sf", fname,
+                    "-bg"  # start in background
+                    ])
+
+'''
+Stop all SIPp
+'''
+def sipp_stop():
+    subprocess.call([
+                    "killall",
+                    "sipp"
+                    ])
+
 
 '''
     SIP API
@@ -81,11 +101,13 @@ def msg_file_send(index, dname, fname, uname, sport):
     port    = str(sport) + str(index)
     number  = str(uname) + str(index)
     fin     = dname + fname + str(index)
-    subprocess.call(["sipsak",
+    subprocess.call([
+                    "sipsak",
 #                    "-vv",
-                     "-l", port,
-                     "-s", "sip:" + number + "@" + "127.0.1.1",
-                     "-f", fin])
+                    "-l", port,
+                    "-s", "sip:" + number + "@" + "127.0.1.1",
+                    "-f", fin
+                    ])
 
 def msg_files_send(calls, dname, fname, uname, sport):
     for index in range(1, calls):
