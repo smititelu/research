@@ -28,8 +28,8 @@
           INVITE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
           Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
           From: sipp <sip:sipp@[local_ip]:[local_port]>;tag=[call_number]
-          To: sut <sip:[service]@[remote_ip]:[remote_port]>
-          Call-ID: blabla///[call_id]
+          To: sipp-server <sip:[service]@[remote_ip]:[remote_port]>;tag=[call_number]
+          Call-ID: [call_id]
           CSeq: 1 INVITE
           Contact: sip:sipp@[local_ip]:[local_port]
           Max-Forwards: 70
@@ -43,7 +43,9 @@
           c=IN IP[media_ip_type] [media_ip]
           t=0 0
           m=audio [media_port] RTP/AVP 0
-          a=rtpmap:0 PCMU/8000
+          a=rtpmap:8 PCMA/8000
+          a=rtpmap:101 telephone-event/8000
+          a=fmtp:101 0-11,16
 
         ]]>
     </send>
@@ -69,8 +71,8 @@
           ACK sip:[service]@[remote_ip]:[remote_port] SIP/2.0
           Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
           From: sipp <sip:sipp@[local_ip]:[local_port]>;tag=[call_number]
-          To: sut <sip:[service]@[remote_ip]:[remote_port]>[peer_tag_param]
-          Call-ID: blabla///[call_id]
+          To: sipp-server <sip:[service]@[remote_ip]:[remote_port]>[peer_tag_param]
+          Call-ID: [call_id]
           CSeq: 1 ACK
           Contact: sip:sipp@[local_ip]:[local_port]
           Max-Forwards: 70
@@ -80,5 +82,14 @@
         ]]>
     </send>
 
-</scenario>
+    <!-- Play an out of band DTMF '1'                                     -->
+    <nop>
+      <action>
+          <exec play_pcap_audio="xml/g711a.pcap"/>
+      </action>
+    </nop>
 
+    <!-- Play an out of band DTMF '1'                                     -->
+    <pause milliseconds="200"/>
+
+</scenario>

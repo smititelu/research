@@ -3,8 +3,10 @@
 '''
     GENERAL
 '''
-INTERFACE0 = "wlan0"
-INTERFACE1 = "wlan1"
+RTP_SERVER = "eth1"
+SIP_SERVER = "eth1"
+SIP_CLIENT0 = "wlan0"
+SIP_CLIENT1 = "wlan1"
 
 SIP_PROTO= "sip"
 SIPS_PROTO= "sips"
@@ -26,13 +28,14 @@ SIPP_BASE_DIR       = "xml/"
 UAC_PORT_CONNECT = 5060
 UAC_PORT_CONTROL = 8889
 
-UAC_MSG_NR          = 600       # total calls
-UAC_MSG_RATE        = 300       # calls per
+UAC_MSG_NR          = 1000      # total calls
+UAC_MSG_RATE        = 100       # calls per
 UAC_MSG_RATEP       = 1000      # milisecond
 
 UAC_INVITE_FILE     = "uac_invite.xml"
 UAC_REINVITE_FILE   = "uac_reinvite.xml"
 UAC_BYE_FILE        = "uac_bye.xml"
+UAC_REFER_FILE      = "uac_refer.xml"
 
 
 '''

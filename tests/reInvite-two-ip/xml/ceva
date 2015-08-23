@@ -1,0 +1,22 @@
+  <!-- Start counting the handover + reInvite time                      -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="seconds,microseconds" />
+      <assign assign_to="start" variable="seconds" />
+    </action>
+  </nop>
+
+
+
+
+  <!-- Stop counting the handover + reInvite time                      -->
+  <!-- Substract and get the diff time                                 -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="seconds,microseconds" />
+      <assign assign_to="stop" variable="seconds" />
+      <subtract assign_to="stop" variable="start" />
+      <exec command="echo [call_id] [$stop] > time.out" />
+    </action>
+  </nop>
+

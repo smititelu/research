@@ -28,26 +28,36 @@ def get_ip_addr(ifname):
 '''
     Start SIPp client
 '''
-def sipp_uac_start(fname, host, msg_nr, rate_nr, ratep_nr):
+def sipp_uac_start(fname, client, server, msg_nr, rate_nr, ratep_nr):
     return subprocess.Popen([
                     "sipp",
+                    server,
                     "-sf", fname,
-                    host,
+                    "-i", client,
+                    "-p", "5060",
+                    "-mi", client,
+                    "-mp", "5000",
                     "-m", msg_nr,
                     "-r", rate_nr,
                     "-rp", ratep_nr,
-                    "-cid_str", "%u@%s",
+                    "-cid_str", "callid-%u",
+                    "-bind_local",
 #                    "-bg"  # start in background
                     ])
 
 '''
     Start SIPp server
 '''
-def sipp_uas_start(fname):
+def sipp_uas_start(fname, server):
     subprocess.call([
                     "sipp",
                     "-sn", "uas",
                     "-sf", fname,
+                    "-i", server,
+                    "-p", "5060",
+                    "-mi", server,
+                    "-mp", "5000",
+                    "-bind_local",
                     "-bg"  # start in background
                     ])
 
