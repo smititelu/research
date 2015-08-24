@@ -68,45 +68,6 @@
         crlf="true" >
   </recv>
 
-  <!-- REFER from wlan0	to refer wlan1					-->
-  <recv request="REFER">
-  </recv>
-
-  <send crlf="true" >
-    <![CDATA[
-
-      SIP/2.0 202 Accepted
-      [last_Via:]
-      [last_From:]
-      [last_To:]
-      [last_Call-ID:]
-      [last_CSeq:]
-      Contact: <sip:[local_ip]:[local_port];transport=[transport]>
-      Content-Length: 0
-
-    ]]>
-  </send>
-
-  <!-- BYE from wlan0 to close dialog					-->
-  <recv request="BYE">
-  </recv>
-
-  <send>
-    <![CDATA[
-
-      SIP/2.0 200 OK
-      [last_Via:]
-      [last_From:]
-      [last_To:]
-      [last_Call-ID:]
-      [last_CSeq:]
-      Contact: <sip:[local_ip]:[local_port];transport=[transport]>
-      Content-Length: 0
-
-    ]]>
-  </send>
-
-
   <!-- definition of the response time repartition table (unit is ms)   -->
   <ResponseTimeRepartition value="10, 20, 30, 40, 50, 100, 150, 200"/>
 

@@ -20,22 +20,12 @@
 <!--                                                                    -->
 
 <scenario name="Basic UAS responder">
-  <!-- By adding rrs="true" (Record Route Sets), the route sets         -->
-  <!-- are saved and used for following messages sent. Useful to test   -->
-  <!-- against stateful SIP proxies/B2BUAs.                             -->
-  <recv request="INVITE" crlf="true">
+  <!-- Set variable 10 if the ua is of the form wlan0...		-->
+  <recv request="INVITE">
+    <action>
+      <ereg regexp="wlan0" search_in="hdr" header="From: " assign_to="10"/>
+    </action>
   </recv>
-
-  <!-- The '[last_*]' keyword is replaced automatically by the          -->
-  <!-- specified header if it was present in the last message received  -->
-  <!-- (except if it was a retransmission). If the header was not       -->
-  <!-- present or if no message has been received, the '[last_*]'       -->
-  <!-- keyword is discarded, and all bytes until the end of the line    -->
-  <!-- are also discarded.                                              -->
-  <!--                                                                  -->
-  <!-- If the specified header was present several times in the         -->
-  <!-- message, all occurences are concatenated (CRLF seperated)        -->
-  <!-- to be used in place of the '[last_*]' keyword.                   -->
 
   <send>
     <![CDATA[
@@ -66,7 +56,7 @@
       Content-Length: [len]
 
       v=0
-      o=user1 53655765 2353687637 IN IP[local_ip_type] [local_ip]
+      o=user1 53655765 2353687637 IN IP[media_ip_type] [media_ip]
       s=-
       c=IN IP[media_ip_type] [media_ip]
       t=0 0
@@ -76,28 +66,16 @@
     ]]>
   </send>
 
+  <!-- jump label 10 if wlan0						-->
   <recv request="ACK"
         rtd="true"
-        crlf="true">
+        crlf="true"
+	next="10" test="10">
   </recv>
 
-
-  <!-- By adding rrs="true" (Record Route Sets), the route sets         -->
-  <!-- are saved and used for following messages sent. Useful to test   -->
-  <!-- against stateful SIP proxies/B2BUAs.                             -->
-  <recv request="INVITE" crlf="true">
+  <!-- expect reInvite if wlan1						-->
+  <recv request="INVITE">
   </recv>
-
-  <!-- The '[last_*]' keyword is replaced automatically by the          -->
-  <!-- specified header if it was present in the last message received  -->
-  <!-- (except if it was a retransmission). If the header was not       -->
-  <!-- present or if no message has been received, the '[last_*]'       -->
-  <!-- keyword is discarded, and all bytes until the end of the line    -->
-  <!-- are also discarded.                                              -->
-  <!--                                                                  -->
-  <!-- If the specified header was present several times in the         -->
-  <!-- message, all occurences are concatenated (CRLF seperated)        -->
-  <!-- to be used in place of the '[last_*]' keyword.                   -->
 
   <send>
     <![CDATA[
@@ -128,7 +106,7 @@
       Content-Length: [len]
 
       v=0
-      o=user1 53655765 2353687637 IN IP[local_ip_type] [local_ip]
+      o=user1 53655765 2353687637 IN IP[media_ip_type] [media_ip]
       s=-
       c=IN IP[media_ip_type] [media_ip]
       t=0 0
@@ -143,6 +121,9 @@
         crlf="true">
   </recv>
 
+
+  <!-- jump here for wlan0						-->
+  <label id="10"/>
 
   <recv request="BYE">
   </recv>

@@ -3,10 +3,13 @@
 '''
     GENERAL
 '''
-RTP_SERVER = "eth1"
-SIP_SERVER = "eth1"
-SIP_CLIENT0 = "wlan0"
-SIP_CLIENT1 = "wlan1"
+RTP_SERVER_IF = "eth1"
+SIP_SERVER_IF = "eth1"
+SIP_CLIENT0_IF = "wlan0"
+SIP_CLIENT1_IF = "wlan1"
+
+SIP_CLIENT0_ID = "0"
+SIP_CLIENT1_ID = "1"
 
 SIP_PROTO= "sip"
 SIPS_PROTO= "sips"

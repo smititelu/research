@@ -18,25 +18,68 @@ else:
     rate_nr = defs.UAC_MSG_RATE
     ratep_nr = defs.UAC_MSG_RATEP
 
+# vars
+sip_server_if = defs.SIP_SERVER_IF
+sip_client0_if = defs.SIP_CLIENT0_IF
+sip_client1_if = defs.SIP_CLIENT1_IF
+
+sip_server_ip = helps_sipp.get_ip_addr(sip_server_if)
+sip_client0_ip = helps_sipp.get_ip_addr(sip_client0_if)
+sip_client1_ip = helps_sipp.get_ip_addr(sip_client1_if)
+sip_server_ip = "192.168.0.103";
+
+sip_server_file = defs.SIPP_BASE_DIR + defs.UAS_FILE
+sip_client0_invite_file = defs.SIPP_BASE_DIR + defs.SIP_CLIENT0_ID + "-" + defs.UAC_INVITE_FILE
+sip_client0_reinvite_file = defs.SIPP_BASE_DIR + defs.SIP_CLIENT0_ID + "-" + defs.UAC_INVITE_FILE
+sip_client0_bye_file = defs.SIPP_BASE_DIR + defs.SIP_CLIENT0_ID + "-" + defs.UAC_BYE_FILE
+sip_client1_invite_file = defs.SIPP_BASE_DIR + defs.SIP_CLIENT1_ID + "-" + defs.UAC_INVITE_FILE
+sip_client1_reinvite_file = defs.SIPP_BASE_DIR + defs.SIP_CLIENT1_ID + "-" + defs.UAC_INVITE_FILE
+sip_client1_bye_file = defs.SIPP_BASE_DIR + defs.SIP_CLIENT1_ID + "-" + defs.UAC_BYE_FILE
+
+print sip_server_file + " " + sip_client0_invite_file + " " + sip_client1_invite_file + " " + sip_client0_reinvite_file + " " + sip_client1_reinvite_file + " " + sip_client0_bye_file + " " + sip_client1_bye_file
+
 # start SIPp UAS in background
 #helps_sipp.sipp_uas_start(defs.SIPP_BASE_DIR + defs.UAS_FILE, helps_sipp.get_ip_addr(defs.SIP_SERVER))
 
 # start SIPP UAC in background
-p = helps_sipp.sipp_uac_start(defs.SIPP_BASE_DIR + defs.UAC_INVITE_FILE,
-	helps_sipp.get_ip_addr(defs.SIP_CLIENT0),
-	helps_sipp.get_ip_addr(defs.SIP_SERVER),
+
+# client 0 invite
+p = helps_sipp.sipp_uac_start(
+	sip_client0_invite_file,
+	sip_client0_ip,
+	sip_server_ip,
 	str(msg_nr), str(rate_nr), str(ratep_nr))
 p.wait()
 
-p = helps_sipp.sipp_uac_start(defs.SIPP_BASE_DIR + defs.UAC_REINVITE_FILE,
-	helps_sipp.get_ip_addr(defs.SIP_CLIENT0),
-	helps_sipp.get_ip_addr(defs.SIP_SERVER),
+# client 1 invite
+p = helps_sipp.sipp_uac_start(
+	sip_client1_invite_file,
+	sip_client1_ip,
+	sip_server_ip,
 	str(msg_nr), str(rate_nr), str(ratep_nr))
 p.wait()
 
-p = helps_sipp.sipp_uac_start(defs.SIPP_BASE_DIR + defs.UAC_BYE_FILE,
-	helps_sipp.get_ip_addr(defs.SIP_CLIENT1),
-	helps_sipp.get_ip_addr(defs.SIP_SERVER),
+# client 1 re-invite
+p = helps_sipp.sipp_uac_start(
+	sip_client1_reinvite_file,
+	sip_client1_ip,
+	sip_server_ip,
+	str(msg_nr), str(rate_nr), str(ratep_nr))
+p.wait()
+
+# client 0 bye
+p = helps_sipp.sipp_uac_start(
+	sip_client0_bye_file,
+	sip_client0_ip,
+	sip_server_ip,
+	str(msg_nr), str(rate_nr), str(ratep_nr))
+p.wait()
+
+# client 1 bye
+p = helps_sipp.sipp_uac_start(
+	sip_client1_bye_file,
+	sip_client1_ip,
+	sip_server_ip,
 	str(msg_nr), str(rate_nr), str(ratep_nr))
 p.wait()
 

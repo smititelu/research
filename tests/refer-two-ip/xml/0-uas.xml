@@ -72,7 +72,7 @@
   <recv request="REFER">
   </recv>
 
-  <send crlf="true" >
+  <send crlf="true">
     <![CDATA[
 
       SIP/2.0 202 Accepted
@@ -86,6 +86,30 @@
 
     ]]>
   </send>
+
+  <!-- Send NOTIFY to wlan0 						-->
+  <send retrans="500">
+    <![CDATA[
+
+      NOTIFY sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: wlan0 <sip:wlan0-[call_number]@[local_ip]:[local_port]>;tag=[call_number]
+      To: sipp-server <sip:[service]@[remote_ip]:[remote_port]>;tag=[call_number]
+      Call-ID: [call_id]
+      CSeq: 2 NOTIFY
+      Contact: sip:wlan0-[call_number]@[local_ip]:[local_port]
+      Max-Forwards: 70
+      Subject: Performance Test
+      Event: refer
+      Subscription-State: active
+      Content-Type: message/sipfrag
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true">
+  </recv>
 
   <!-- BYE from wlan0 to close dialog					-->
   <recv request="BYE">

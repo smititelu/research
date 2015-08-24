@@ -25,12 +25,6 @@ def get_ip_addr(ifname):
         ip = ""
     return ip
 
-def add_ip_route(ifname, ip):
-    return subprocess.Popen(["ip", "route", "add", ip, "/32", "dev ", ifname])
-
-def del_ip_route(ifname, ip,):
-    return subprocess.Popen(["ip", "route", "del ", ip, "/32", "dev ", ifname])
-
 '''
     Start SIPp client
 '''
@@ -46,7 +40,7 @@ def sipp_uac_start(fname, client, server, msg_nr, rate_nr, ratep_nr):
                     "-m", msg_nr,
                     "-r", rate_nr,
                     "-rp", ratep_nr,
-                    "-cid_str", "%u@%s",
+                    "-cid_str", "callid-%u",
                     "-bind_local",
 #                    "-bg"  # start in background
                     ])

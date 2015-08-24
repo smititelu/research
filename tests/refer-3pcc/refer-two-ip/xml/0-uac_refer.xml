@@ -27,11 +27,11 @@
 
           REFER sip:[service]@[remote_ip]:[remote_port] SIP/2.0
           Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-          From: sipp <sip:sipp@[local_ip]:[local_port]>;tag=[call_number]
+          From: wlan0 <sip:wlan0-[call_number]@[local_ip]:[local_port]>;tag=[call_number]
           To: sipp-server <sip:[service]@[remote_ip]:[remote_port]>;tag=[call_number]
           Call-ID: [call_id]
           CSeq: 1 REFER
-          Contact: sip:sipp@[local_ip]:[local_port]
+          Contact: sip:wlan0-[call_number]@[local_ip]:[local_port]
           Max-Forwards: 70
           Subject: Performance Test
           Refer-to: sip:sipp@192.168.0.103:[local_port]
@@ -41,13 +41,10 @@
         ]]>
     </send>
 
-    </send>
-
-    <recv response="202" rtd="true" crlf="true">
+    <recv response="202" crlf="true">
     </recv>
 
-<!--
-    <recv response="NOTIFY" rtd="true">
+    <recv request="NOTIFY" rtd="true">
     </recv>
 
     <send crlf="true">
@@ -64,6 +61,5 @@
 
       ]]>
     </send>
--->
 
 </scenario>
