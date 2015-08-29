@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
+
+<!--    UAC wlan0          <==== UAS Controller ====>          UAC wlan1     -->
+<!--     client0           server0            server1           client1      -->
+<!--        |.................|..................|.................|         -->
+<!--        | <== SIP/RTP ==> | <== commands ==> | <== SIP/RTP ==> |         -->
+<!--        |......................................................|         -->
+
+<scenario name="3PCC client0 side">
+
+  <!-- 3pcc client0 user variables to measure handover time -->
+  <User variables="start_sec,start_msec,stop_sec,stop_msec" />
+
+  <!-- 3pcc client0 receives INVITE -->
+  <recv request="INVITE"> </recv>
+
+  <send>
+    <![CDATA[
+
+      SIP/2.0 180 Ringing
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+  <send>
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
+      Content-Type: application/sdp
+      Content-Length: [len]
+
+      v=0
+      o=user1 53655765 2353687637 IN IP[media_ip_type] [media_ip]
+      s=-
+      c=IN IP[media_ip_type] [media_ip]
+      t=0 0
+      m=audio [media_port] RTP/AVP 0
+      a=rtpmap:0 PCMU/8000
+
+    ]]>
+  </send>
+
+  <recv request="ACK" crlf="true"> </recv>
+
+
+  <!-- 3pcc client0 pause to synchronize with 3pcc server0 which starts RTP media -->
+  <pause milliseconds="500" crlf="true"/>
+
+
+  <!-- 3pcc client0 starts handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="start_sec,start_msec" />
+      <exec command="echo STRT: [call_id] [$start_sec] [$start_msec] >> time.out" />
+    </action>
+  </nop>
+
+
+  <!-- 3pcc client0 sends REFER -->
+  <send>
+    <![CDATA[
+
+      REFER sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      [last_From:]
+      [last_To:]
+      [last_Call-ID:]
+      CSeq: [cseq] REFER
+      Refer-to: <sip:client1@192.168.0.105>
+      Referred-By: <client0@[local_ip]>
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+  <recv response="202" crlf="true"> </recv>
+
+
+  <!-- 3pcc client0 receives NOTIFY -->
+  <recv request="NOTIFY"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- 3pcc client0 receives second NOTIFY -->
+  <recv request="NOTIFY"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- 3pcc client0 stops handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="stop_sec,stop_msec" />
+      <exec command="echo STOP: [call_id] [$stop_sec] [$stop_msec] >> time.out" />
+      <subtract assign_to="stop_sec" variable="start_sec" />
+      <subtract assign_to="stop_msec" variable="start_msec" />
+      <exec command="echo DIFF: [call_id] [$stop_sec] [$stop_msec] >> time.out" />
+    </action>
+  </nop>
+
+
+  <!-- 3pcc client0 pause to to have some RTP media before BYE -->
+  <pause milliseconds="1000"/>
+
+
+  <!-- 3pcc client0 sends BYE -->
+  <send>
+    <![CDATA[
+
+      BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      [last_From:]
+      [last_To:]
+      [last_Call-ID:]
+      CSeq: [cseq] BYE
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true"> </recv>
+
+</scenario>
