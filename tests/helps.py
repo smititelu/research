@@ -3,6 +3,7 @@
 import netifaces
 import subprocess
 import os
+import re
 
 from netifaces import AF_INET, AF_INET6, AF_LINK, AF_PACKET, AF_BRIDGE
 
@@ -115,6 +116,27 @@ def sipp_3pcc_uas_start(fname,
                     "-bg"  # start in background
                     ])
 
+def tcpdump_start(fname):
+    return subprocess.Popen([
+                   "tcpdump",
+                    "-w", fname,
+                    "-i", "any",
+                    "-n",
+                    "-q",
+                    "-t",
+                    ])
+
+def tcpdump_stop():
+    subprocess.call([
+                    "killall",
+                    "tcpdump"
+                    ])
+
+def png_start(fname, ftitle):
+    return subprocess.Popen([
+                    "./png_from_pcap.sh " + fname + " " + '"' + ftitle + '"',
+                    ], shell=True, stderr=open("/dev/null"))
+
 '''
     Stop all SIPp
 '''
@@ -123,3 +145,10 @@ def sipp_stop():
                     "killall",
                     "sipp"
                     ])
+
+def process_is_running(process):
+    s = subprocess.Popen(["ps", "aux"], stdout=subprocess.PIPE)
+    for x in s.stdout:
+        if re.search(process, x):
+            return True
+    return False

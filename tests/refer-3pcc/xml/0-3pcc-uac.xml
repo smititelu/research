@@ -65,7 +65,6 @@
   <nop>
     <action>
       <gettimeofday assign_to="start_sec,start_msec" />
-      <exec command="echo STRT: [call_id] [$start_sec] [$start_msec] >> time.out" />
     </action>
   </nop>
 
@@ -135,10 +134,9 @@
   <nop>
     <action>
       <gettimeofday assign_to="stop_sec,stop_msec" />
-      <exec command="echo STOP: [call_id] [$stop_sec] [$stop_msec] >> time.out" />
       <subtract assign_to="stop_sec" variable="start_sec" />
       <subtract assign_to="stop_msec" variable="start_msec" />
-      <exec command="echo DIFF: [call_id] [$stop_sec] [$stop_msec] >> time.out" />
+      <exec command="echo [$stop_sec] [$stop_msec] >> refer-3pcc/time.out" />
     </action>
   </nop>
 

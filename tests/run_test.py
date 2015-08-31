@@ -1,22 +1,32 @@
 import sys
 import helps
-
-sys.path.append("../")
 import defs
+import os
+import time
+
+test_list = ['refer-3pcc']
 
 # check if given number of calls is given as argument
-if len(sys.argv) > 3:
+if len(sys.argv) > 5:
     try:
-        msg_nr = int(sys.argv[1])
-        rate_nr = int(sys.argv[2])
-        ratep_nr = int(sys.argv[3])
+        test_name = str(sys.argv[1])
+        test_title = str(sys.argv[2])
+        msg_nr = int(sys.argv[3])
+        rate_nr = int(sys.argv[4])
+        ratep_nr = int(sys.argv[5])
     except Exception:
-        print("Usage: sudo python run_test.py [msg_nr] [rate_nr] [ratep_nr]")
+        print("Usage: sudo python run_test.py [test_name] [test_title] [msg_nr] [rate_nr] [ratep_nr]")
         exit()
 else:
+    test_name = "default_test"
+    test_title = "default_title"
     msg_nr = defs.UAC_MSG_NR
     rate_nr = defs.UAC_MSG_RATE
     ratep_nr = defs.UAC_MSG_RATEP
+
+if not any(test_name in item for item in test_list):
+    print "Test " + test_name + " not found!"
+    exit()
 
 # users
 sip_server0_user = defs.SIP_3PCC_SERVER0_USER
@@ -73,11 +83,13 @@ rtp_client0_ip = helps.get_ip_addr(rtp_client0_if)
 rtp_client1_ip = helps.get_ip_addr(rtp_client1_if)
 
 # files
-sip_server0_file = defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_SERVER0_FILE
-sip_server1_file = defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_SERVER1_FILE
+sip_server0_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_SERVER0_FILE
+sip_server1_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_SERVER1_FILE
 
-sip_client0_file = defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_CLIENT0_FILE
-sip_client1_file = defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_CLIENT1_FILE
+sip_client0_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_CLIENT0_FILE
+sip_client1_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_CLIENT1_FILE
+
+order= test_name + "/order"
 
 '''
 print "SERVER0 USER: " + sip_server0_user + " " + sip_server0_file + " " + sip_server0_ip + ":" + sip_server0_port + " " + rtp_server0_ip + ":" + rtp_server0_port
@@ -87,26 +99,31 @@ print "CLIENT1 USER: " + sip_client1_user + " " + sip_client1_file + " " + sip_c
 print "TWIN port: " + sip_twin_port
 '''
 
+# start tcpdump capture
+helps.tcpdump_start(test_name + "/" + test_name + ".pcap")
+
 # start uac 0
-helps.sipp_3pcc_uac_start(
+p = helps.sipp_3pcc_uac_start(
 	sip_client0_file,
 	sip_client0_ip, sip_client0_port,
 	rtp_client0_ip, rtp_client0_port,
 	sip_server0_ip, sip_server0_port,
 	sip_server0_user,
 	str(msg_nr), str(rate_nr), str(ratep_nr))
+p.wait()
 
 # start uac 1
-helps.sipp_3pcc_uac_start(
+p = helps.sipp_3pcc_uac_start(
 	sip_client1_file,
 	sip_client1_ip, sip_client1_port,
 	rtp_client1_ip, rtp_client1_port,
 	sip_server1_ip, sip_server1_port,
 	sip_server1_user,
 	str(msg_nr), str(rate_nr), str(ratep_nr))
+p.wait()
 
 # start uas 1 - 3pcc B side
-helps.sipp_3pcc_uas_start(
+p = helps.sipp_3pcc_uas_start(
 	sip_server1_file,
 	sip_client1_ip, sip_client1_port,
 	sip_server1_ip, sip_server1_port,
@@ -114,9 +131,10 @@ helps.sipp_3pcc_uas_start(
 	sip_server0_ip, sip_twin_port,
 	sip_client1_user,
 	str(msg_nr), str(rate_nr), str(ratep_nr))
+p.wait()
 
 # start uas 0 - 3pcc A side
-helps.sipp_3pcc_uas_start(
+p = helps.sipp_3pcc_uas_start(
 	sip_server0_file,
 	sip_client0_ip, sip_client0_port,
 	sip_server0_ip, sip_server0_port,
@@ -124,3 +142,28 @@ helps.sipp_3pcc_uas_start(
 	sip_server1_ip, sip_twin_port,
 	sip_client0_user,
 	str(msg_nr), str(rate_nr), str(ratep_nr))
+p.wait()
+
+while helps.process_is_running("sipp"):
+       1;
+
+# create order file used for ca
+fd=open(order, "w+")
+print >> fd, sip_client0_ip + ":.* UAC wlan0"
+print >> fd, sip_server0_ip + ":.* UAS server0"
+if sip_server0_ip != sip_server1_ip:
+	print >> fd, sip_server1_ip + ":.* UAS server1"
+print >> fd, sip_client1_ip + ":.* UAC wlan1"
+fd.close()
+
+# start final processing script
+p = helps.png_start(test_name, test_title)
+p.wait()
+
+# cleanup
+try:
+    os.remove(order)
+except OSError:
+    pass
+
+helps.tcpdump_stop()

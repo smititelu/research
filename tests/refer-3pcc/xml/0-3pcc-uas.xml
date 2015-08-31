@@ -65,7 +65,7 @@
   <!-- 3pcc server0 starts RTP media -->
   <nop>
     <action>
-      <exec play_pcap_audio="xml/g711a.pcap"/>
+      <exec play_pcap_audio="refer-3pcc/xml/g711a.pcap"/>
     </action>
   </nop>
 
