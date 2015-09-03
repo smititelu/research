@@ -7,9 +7,9 @@
 <!--        | <== SIP/RTP ==> | <== commands ==> | <== SIP/RTP ==> |         -->
 <!--        |......................................................|         -->
 
-<scenario name="3PCC client1 side">
+<scenario name="3PCC client0 side">
 
-  <!-- 3pcc client1 receives INVITE -->
+  <!-- 3pcc client0 receives INVITE -->
   <recv request="INVITE"> </recv>
 
   <send>
@@ -21,7 +21,7 @@
       [last_To:];tag=[call_number]
       [last_Call-ID:]
       [last_CSeq:]
-      Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
       Content-Length: 0
 
     ]]>
@@ -36,7 +36,7 @@
       [last_To:];tag=[call_number]
       [last_Call-ID:]
       [last_CSeq:]
-      Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
       Content-Type: application/sdp
       Content-Length: [len]
 
@@ -52,25 +52,6 @@
   </send>
 
   <recv request="ACK" crlf="true"> </recv>
-
-
-  <!-- 3pcc client1 receives BYE -->
-  <recv request="BYE"> </recv>
-
-  <send crlf="true">
-    <![CDATA[
-
-      SIP/2.0 200 OK
-      [last_Via:]
-      [last_From:]
-      [last_To:]
-      [last_Call-ID:]
-      [last_CSeq:]
-      Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
-      Content-Length: 0
-
-    ]]>
-  </send>
 
 
   <!-- pause to capture complete traffic -->

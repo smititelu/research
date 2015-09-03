@@ -132,9 +132,9 @@ def tcpdump_stop():
                     "tcpdump"
                     ])
 
-def png_start(fname, ftitle):
+def result_start(fname, ftitle):
     return subprocess.Popen([
-                    "./png_from_pcap.sh " + fname + " " + '"' + ftitle + '"',
+                    "./result.sh " + fname + " " + '"' + ftitle + '"',
                     ], shell=True, stderr=open("/dev/null"))
 
 '''

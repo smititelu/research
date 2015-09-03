@@ -4,7 +4,7 @@ import defs
 import os
 import time
 
-test_list = ['refer-3pcc']
+test_list = ['refer-3pcc', 'reinvite-3pcc']
 
 # check if given number of calls is given as argument
 if len(sys.argv) > 5:
@@ -90,6 +90,7 @@ sip_client0_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_CL
 sip_client1_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_CLIENT1_FILE
 
 order= test_name + "/order"
+result = test_name + "/time.out"
 
 '''
 print "SERVER0 USER: " + sip_server0_user + " " + sip_server0_file + " " + sip_server0_ip + ":" + sip_server0_port + " " + rtp_server0_ip + ":" + rtp_server0_port
@@ -98,6 +99,12 @@ print "CLIENT0 USER: " + sip_client0_user + " " + sip_client0_file + " " + sip_c
 print "CLIENT1 USER: " + sip_client1_user + " " + sip_client1_file + " " + sip_client1_ip + ":" + sip_client1_port + " " + rtp_client1_ip + ":" + rtp_client1_port
 print "TWIN port: " + sip_twin_port
 '''
+# cleanup
+try:
+    os.remove(order)
+    os.remove(result)
+except OSError:
+    pass
 
 # start tcpdump capture
 helps.tcpdump_start(test_name + "/" + test_name + ".pcap")
@@ -156,14 +163,10 @@ if sip_server0_ip != sip_server1_ip:
 print >> fd, sip_client1_ip + ":.* UAC wlan1"
 fd.close()
 
+# stop tcpdump
+helps.tcpdump_stop()
+
 # start final processing script
-p = helps.png_start(test_name, test_title)
+p = helps.result_start(test_name, test_title)
 p.wait()
 
-# cleanup
-try:
-    os.remove(order)
-except OSError:
-    pass
-
-helps.tcpdump_stop()

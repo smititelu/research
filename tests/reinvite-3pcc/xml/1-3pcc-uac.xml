@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE scenario SYSTEM "server1.dtd">
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
 
 <!--    UAC wlan0          <==== UAS Controller ====>          UAC wlan1     -->
-<!--     client0           server0            server1           client1      -->
+<!--     client1           client1            client1           client1      -->
 <!--        |.................|..................|.................|         -->
 <!--        | <== SIP/RTP ==> | <== commands ==> | <== SIP/RTP ==> |         -->
 <!--        |......................................................|         -->
 
-<scenario name="3PCC server1 side">
+<scenario name="3PCC client1 side">
 
-  <!-- 3pcc server1 receives command -->
-  <recvCmd crlf="true"> </recvCmd>
+  <!-- 3pcc client1 user variables to measure handover time -->
+  <User variables="start_sec,start_msec,stop_sec,stop_msec" />
 
 
-  <!-- 3pcc server1 sends INVITE -->
+  <!-- 3pcc client1 receives OPTIONS that will simulate handover trigger -->
+  <recv request="OPTIONS"> </recv>
+
+
+  <!-- 3pcc client1 starts handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="start_sec,start_msec" />
+    </action>
+  </nop>
+
+
+  <!-- 3pcc client1 sends INVITE -->
   <send>
     <![CDATA[
 
       INVITE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      From: server1 <sip:server1@[local_ip]:[local_port]>;tag=[call_number]
-      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
-      Call-ID: dialog1///[call_id]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
       CSeq: [cseq] INVITE
-      Contact: server1 <sip:server1@[local_ip]:[local_port]>
+      Contact: client1 <sip:client1@[local_ip]:[local_port]>
       Max-Forwards: 70
       Subject: Performance Test
       Content-Type: application/sdp
@@ -46,9 +58,9 @@
 
   <recv response="180" optional="true"> </recv>
 
-  <recv response="200" > </recv>
+  <recv response="200" crlf="true"> </recv>
 
-  <send crlf="true">
+  <send>
     <![CDATA[
 
       ACK sip:[service]@[remote_ip]:[remote_port] SIP/2.0
@@ -57,7 +69,7 @@
       [last_To:]
       [last_Call-ID:]
       CSeq: [cseq] ACK
-      Contact: server1 <sip:server1@[local_ip]:[local_port]>
+      Contact: client1 <sip:client1@[local_ip]:[local_port]>
       Max-Forwards: 70
       Subject: Performance Test
       Content-Length: 0
@@ -66,31 +78,22 @@
   </send>
 
 
-  <!-- 3pcc server1 starts RTP media -->
+  <!-- 3pcc client1 stops handover timers -->
   <nop>
     <action>
-      <exec play_pcap_audio="refer-3pcc/xml/g711a.pcap"/>
+      <gettimeofday assign_to="stop_sec,stop_msec" />
+      <subtract assign_to="stop_sec" variable="start_sec" />
+      <subtract assign_to="stop_msec" variable="start_msec" />
+      <exec command="echo [$stop_sec] [$stop_msec] >> reinvite-3pcc/time.out" />
     </action>
   </nop>
 
 
-  <!-- 3pcc server1 sends command -->
-  <sendCmd crlf="true">
-    <![CDATA[
-      Call-ID: [call_id]
-    ]]>
-  </sendCmd>
+  <!-- 3pcc client1 pause to receive some media -->
+  <pause milliseconds="1000" crlf="true"/>
 
 
-  <!-- 3pcc server1 receives command -->
-  <recvCmd crlf="true"> </recvCmd>
-
-
-  <!-- 3pcc server1 pause to to have some RTP media before BYE -->
-  <pause milliseconds="500"/>
-
-
-  <!-- 3pcc server1 sends INVITE -->
+  <!-- 3pcc client1 sends BYE -->
   <send>
     <![CDATA[
 
@@ -100,7 +103,7 @@
       [last_To:]
       [last_Call-ID:]
       CSeq: [cseq] BYE
-      Contact: server1 <sip:server1@[local_ip]:[local_port]>
+      Contact: client1 <sip:client1@[local_ip]:[local_port]>
       Max-Forwards: 70
       Subject: Performance Test
       Content-Length: 0
@@ -109,14 +112,6 @@
   </send>
 
   <recv response="200" crlf="true"> </recv>
-
-
-  <!-- 3pcc server1 sends command -->
-  <sendCmd crlf="true">
-    <![CDATA[
-      Call-ID: [call_id]
-    ]]>
-  </sendCmd>
 
 
   <!-- pause to capture complete traffic -->

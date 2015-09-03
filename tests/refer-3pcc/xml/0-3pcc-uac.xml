@@ -165,4 +165,8 @@
 
   <recv response="200" crlf="true"> </recv>
 
+
+  <!-- pause to capture complete traffic -->
+  <pause milliseconds="1000" crlf="true"/>
+
 </scenario>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE scenario SYSTEM "sipp.dtd">
+<!DOCTYPE scenario SYSTEM "server1.dtd">
 
 <!--    UAC wlan0          <==== UAS Controller ====>          UAC wlan1     -->
 <!--     client0           server0            server1           client1      -->
@@ -7,9 +7,34 @@
 <!--        | <== SIP/RTP ==> | <== commands ==> | <== SIP/RTP ==> |         -->
 <!--        |......................................................|         -->
 
-<scenario name="3PCC client1 side">
+<scenario name="3PCC server1 side">
 
-  <!-- 3pcc client1 receives INVITE -->
+  <!-- 3pcc server1 receives command to start simulate handover trigger -->
+  <recvCmd crlf="true"> </recvCmd>
+
+
+  <!-- 3pcc server1 sends request to trigger handover -->
+  <send>
+    <![CDATA[
+
+      OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: server0 <sip:server0@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      Call-ID: [call_id]
+      CSeq: [cseq] INVITE
+      Contact: server0 <sip:server0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Allow: INVITE,ACK,CANCEL,OPTIONS,BYE,REFER,SUBSCRIBE,NOTIFY,INFO
+      Supported: replaces
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- 3pcc server1 receives handover INVITE -->
   <recv request="INVITE"> </recv>
 
   <send>
@@ -21,7 +46,7 @@
       [last_To:];tag=[call_number]
       [last_Call-ID:]
       [last_CSeq:]
-      Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
       Content-Length: 0
 
     ]]>
@@ -36,7 +61,7 @@
       [last_To:];tag=[call_number]
       [last_Call-ID:]
       [last_CSeq:]
-      Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
       Content-Type: application/sdp
       Content-Length: [len]
 
@@ -54,7 +79,23 @@
   <recv request="ACK" crlf="true"> </recv>
 
 
-  <!-- 3pcc client1 receives BYE -->
+  <!-- 3pcc server1 starts RTP media -->
+  <nop>
+    <action>
+      <exec play_pcap_audio="reinvite-3pcc/xml/g711a.pcap"/>
+    </action>
+  </nop>
+
+
+  <!-- 3pcc server1 sends command -->
+  <sendCmd crlf="true">
+    <![CDATA[
+      Call-ID: [call_id]
+    ]]>
+  </sendCmd>
+
+
+  <!-- 3pcc server1 receives BYE -->
   <recv request="BYE"> </recv>
 
   <send crlf="true">
@@ -71,6 +112,14 @@
 
     ]]>
   </send>
+
+
+  <!-- 3pcc server1 sends command to terminate scenario -->
+  <sendCmd crlf="true">
+    <![CDATA[
+      Call-ID: [call_id]
+    ]]>
+  </sendCmd>
 
 
   <!-- pause to capture complete traffic -->
