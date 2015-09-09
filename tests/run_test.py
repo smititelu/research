@@ -4,7 +4,7 @@ import defs
 import os
 import time
 
-test_list = ['refer-3pcc', 'reinvite-3pcc', 'reinvite-proactive-3pcc']
+test_list = ['refer-3pcc', 'reinvite-3pcc', 'reinvite-proactive-3pcc', 'reinvite-proactive-extension-3pcc']
 
 # check if given number of calls is given as argument
 if len(sys.argv) > 5:

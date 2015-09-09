@@ -9,7 +9,7 @@
 
 <scenario name="3PCC client0 side">
 
-  <!-- pause to synchronize with server0 -->
+  <!-- pause to synchronize with the server0  -->
   <pause milliseconds="1000" crlf="true"/>
 
 
@@ -21,9 +21,10 @@
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       From: client0 <sip:client0@[local_ip]:[local_port]>;tag=[call_number]
       To: [service] <sip:[service]@[remote_ip]:[remote_port]>
-      Call-ID: [call_id]
+      Call-ID: dialog0///[call_id]
       CSeq: [cseq] INVITE
       Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Require: Handover
       Max-Forwards: 70
       Subject: Performance Test
       Content-Type: application/sdp
@@ -41,10 +42,6 @@
 
     ]]>
   </send>
-
-  <recv response="100" optional="true"> </recv>
-
-  <recv response="180" optional="true"> </recv>
 
   <recv response="200"> </recv>
 
@@ -68,6 +65,27 @@
 
   <!-- 3pcc client0 receives OPTIONS that will terminate media session on wlan0 -->
   <recv request="OPTIONS" crlf="true"> </recv>
+
+
+  <!-- 3pcc client0 sends BYE -->
+  <send>
+    <![CDATA[
+
+      BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      [last_From:]
+      [last_To:]
+      [last_Call-ID:]
+      CSeq: [cseq] BYE
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true"> </recv>
 
 
   <!-- pause to capture complete traffic -->

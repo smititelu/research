@@ -22,6 +22,7 @@
       [last_Call-ID:]
       [last_CSeq:]
       Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Supported: Handover
       Content-Type: application/sdp
       Content-Length: [len]
 
@@ -40,9 +41,9 @@
 
 
   <!-- 3pcc server0 starts RTP media -->
-  <nop>
+  <nop crlf="true">
     <action>
-      <exec play_pcap_audio="reinvite-proactive-3pcc/xml/g711a.pcap"/>
+      <exec play_pcap_audio="reinvite-proactive-extension-3pcc/xml/g711a.pcap"/>
     </action>
   </nop>
 
@@ -51,39 +52,27 @@
   <pause milliseconds="1000" crlf="true"/>
 
 
-  <!-- 3pcc server0 sends command that will trigger second interface invite -->
-  <sendCmd crlf="true">
-    <![CDATA[
-      Call-ID: [call_id]
-    ]]>
-  </sendCmd>
-
-
-  <!-- 3pcc server0 receives command that triggered second interface invite -->
-  <recvCmd crlf="true"> </recvCmd>
-
-
   <!-- 3pcc server0 sends command that will trigger handover -->
   <sendCmd crlf="true">
     <![CDATA[
-      Call-ID: [call_id]
+      Call-ID: dialog0///[call_id]
     ]]>
   </sendCmd>
 
 
-  <!-- 3pcc server0 receives command to terminate scenario -->
+  <!-- 3pcc server0 receives command that will trigger handover -->
   <recvCmd crlf="true"> </recvCmd>
 
 
   <!-- 3pcc server0 sends request to trigger handover -->
-  <send>
+  <send crlf="true">
     <![CDATA[
 
       OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       From: server0 <sip:server0@[local_ip]:[local_port]>;tag=[call_number]
       To: [service] <sip:[service]@[remote_ip]:[remote_port]>
-      Call-ID: [call_id]
+      Call-ID: dialog0///[call_id]
       CSeq: [cseq] OPTIONS
       Contact: server0 <sip:server0@[local_ip]:[local_port]>
       Max-Forwards: 70
@@ -94,6 +83,33 @@
 
     ]]>
   </send>
+
+
+  <!-- 3pcc server0 receives BYE -->
+  <recv request="BYE"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- 3pcc server0 sends command that will end scenario -->
+  <sendCmd crlf="true">
+    <![CDATA[
+      Call-ID: dialog0///[call_id]
+    ]]>
+  </sendCmd>
 
 
   <!-- pause to capture complete traffic -->
