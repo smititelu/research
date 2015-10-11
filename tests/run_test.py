@@ -69,6 +69,7 @@ rtp_client0_port = defs.RTP_3PCC_CLIENT0_PORT
 rtp_client1_port = defs.RTP_3PCC_CLIENT1_PORT
 
 sip_twin_port = defs.SIP_3PCC_TWIN_PORT
+
 # ip
 sip_server0_ip = helps.get_ip_addr(sip_server0_if)
 sip_server1_ip = helps.get_ip_addr(sip_server1_if)
@@ -154,19 +155,23 @@ p.wait()
 while helps.process_is_running("sipp"):
        1;
 
-# create order file used for ca
-fd=open(order, "w+")
-print >> fd, sip_client0_ip + ":.* UAC wlan0"
-print >> fd, sip_server0_ip + ":.* UAS server0"
-if sip_server0_ip != sip_server1_ip:
-	print >> fd, sip_server1_ip + ":.* UAS server1"
-print >> fd, sip_client1_ip + ":.* UAC wlan1"
-fd.close()
-
 # stop tcpdump
 helps.tcpdump_stop()
 
-# start final processing script
+# start processing callflow flow only for one sip msg
+if msg_nr == 1:
+	# create order file used for ca
+	fd=open(order, "w+")
+	print >> fd, sip_client0_ip + ":.* UAC wlan0"
+	print >> fd, sip_server0_ip + ":.* UAS server0"
+	if sip_server0_ip != sip_server1_ip:
+		print >> fd, sip_server1_ip + ":.* UAS server1"
+	print >> fd, sip_client1_ip + ":.* UAC wlan1"
+	fd.close()
+
+	p = helps.flow_start(test_name, test_title)
+	p.wait()
+
+# start processing results
 p = helps.result_start(test_name, test_title)
 p.wait()
-

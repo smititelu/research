@@ -137,6 +137,11 @@ def result_start(fname, ftitle):
                     "./result.sh " + fname + " " + '"' + ftitle + '"',
                     ], shell=True, stderr=open("/dev/null"))
 
+def flow_start(fname, ftitle):
+    return subprocess.Popen([
+                    "./flow.sh " + fname + " " + '"' + ftitle + '"',
+                    ], shell=True, stderr=open("/dev/null"))
+
 '''
     Stop all SIPp
 '''
