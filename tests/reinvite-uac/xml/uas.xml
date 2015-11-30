@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
+
+<!--    UAC wlan0         UAC wlan1     -->
+<!--     client0           server0      -->
+<!--        |.................|         -->
+<!--        | <== SIP/RTP ==> |         -->
+<!--        |.................|         -->
+
+
+<scenario name="UAS server0 side">
+
+  <!-- server0 receives INVITE -->
+  <recv request="INVITE"> </recv>
+
+  <send>
+    <![CDATA[
+
+      SIP/2.0 180 Ringing
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+  <send>
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Type: application/sdp
+      Content-Length: [len]
+
+      v=0
+      o=user1 53655765 2353687637 IN IP[media_ip_type] [media_ip]
+      s=-
+      c=IN IP[media_ip_type] [media_ip]
+      t=0 0
+      m=audio [media_port] RTP/AVP 0
+      a=rtpmap:0 PCMU/8000
+
+    ]]>
+  </send>
+
+  <recv request="ACK" crlf="true"> </recv>
+
+
+  <!-- server0 starts RTP media -->
+  <nop>
+    <action>
+      <exec play_pcap_audio="reinvite-uac/xml/g711a.pcap"/>
+    </action>
+  </nop>
+
+
+  <!-- server0 receives BYE -->
+  <recv request="BYE"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- server0 receives INVITE -->
+  <recv request="INVITE"> </recv>
+
+  <send>
+    <![CDATA[
+
+      SIP/2.0 180 Ringing
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+  <send>
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Type: application/sdp
+      Content-Length: [len]
+
+      v=0
+      o=user1 53655765 2353687637 IN IP[media_ip_type] [media_ip]
+      s=-
+      c=IN IP[media_ip_type] [media_ip]
+      t=0 0
+      m=audio [media_port] RTP/AVP 0
+      a=rtpmap:0 PCMU/8000
+
+    ]]>
+  </send>
+
+  <recv request="ACK" crlf="true"> </recv>
+
+
+  <!-- server0 starts RTP media -->
+  <nop>
+    <action>
+      <exec play_pcap_audio="reinvite-uac/xml/g711a.pcap"/>
+    </action>
+  </nop>
+
+
+  <!-- server0 receives BYE -->
+  <recv request="BYE"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- pause to capture complete traffic -->
+  <pause milliseconds="1000" crlf="true"/>
+
+</scenario>

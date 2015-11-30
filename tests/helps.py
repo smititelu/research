@@ -29,19 +29,28 @@ def get_ip_addr(ifname):
 '''
     Start SIPp client
 '''
-def sipp_uac_start(fname, client, server, msg_nr, rate_nr, ratep_nr):
+def sipp_uac_start(fname,
+        client_ip, client_port,
+        client_media_ip, client_media_port,
+        server_ip, server_port,
+	service,
+        msg_nr="1", rate_nr="1", ratep_nr="1", T2="1"):
     return subprocess.Popen([
                     "sipp",
-                    server,
+                    server_ip+":"+server_port,
                     "-sf", fname,
-                    "-i", client,
-                    "-p", "5060",
-                    "-mi", client,
-                    "-mp", "5000",
+                    "-i", client_ip,
+                    "-p", client_port,
+                    "-mi", client_media_ip,
+                    "-mp", client_media_port,
+                    "-s", service,
                     "-m", msg_nr,
                     "-r", rate_nr,
                     "-rp", ratep_nr,
-                    "-cid_str", "callid-%u",
+                    "-T2", T2,
+                    "-cid_str", "%u@%s",
+                    "-rtp_echo",
+                    "-nd",
                     "-bind_local",
                     "-bg"  # start in background
                     ])
@@ -49,19 +58,35 @@ def sipp_uac_start(fname, client, server, msg_nr, rate_nr, ratep_nr):
 '''
     Start SIPp server
 '''
-def sipp_uas_start(fname, server):
-    subprocess.call([
+def sipp_uas_start(fname,
+        client_ip, client_port,
+        server_ip, server_port,
+        server_media_ip, server_media_port,
+	service,
+        msg_nr="1", rate_nr="1", ratep_nr="1", T2="1"):
+    return subprocess.Popen([
                     "sipp",
-                    "-sn", "uas",
+                    client_ip + ":" + client_port,
                     "-sf", fname,
-                    "-i", server,
-                    "-p", "5060",
-                    "-mi", server,
-                    "-mp", "5000",
+                    "-i", server_ip,
+                    "-p", server_port,
+                    "-mi", server_media_ip,
+                    "-mp", server_media_port,
+                    "-s", service,
+                    "-m", msg_nr,
+                    "-r", rate_nr,
+                    "-rp", ratep_nr,
+                    "-T2", T2,
+                    "-cid_str", "%u@%s",
+#                    "-rtp_echo",
+                    "-nd",
                     "-bind_local",
                     "-bg"  # start in background
                     ])
 
+'''
+    Start SIPp 3pcc client
+'''
 def sipp_3pcc_uac_start(fname,
         client_ip, client_port,
         client_media_ip, client_media_port,
@@ -88,6 +113,9 @@ def sipp_3pcc_uac_start(fname,
                     "-bg"  # start in background
                     ])
 
+'''
+    Start SIPp 3pcc server
+'''
 def sipp_3pcc_uas_start(fname,
         client_ip, client_port,
         server_ip, server_port,
@@ -116,6 +144,18 @@ def sipp_3pcc_uas_start(fname,
                     "-bg"  # start in background
                     ])
 
+'''
+    Stop all SIPp
+'''
+def sipp_stop():
+    subprocess.call([
+                    "killall",
+                    "sipp"
+                    ])
+
+'''
+    Other script stuff
+'''
 def tcpdump_start(fname):
     return subprocess.Popen([
                    "tcpdump",
@@ -142,14 +182,6 @@ def flow_start(fname, ftitle):
                     "./flow.sh " + fname + " " + '"' + ftitle + '"',
                     ], shell=True, stderr=open("/dev/null"))
 
-'''
-    Stop all SIPp
-'''
-def sipp_stop():
-    subprocess.call([
-                    "killall",
-                    "sipp"
-                    ])
 
 def process_is_running(process):
     s = subprocess.Popen(["ps", "aux"], stdout=subprocess.PIPE)

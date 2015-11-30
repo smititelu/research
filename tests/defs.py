@@ -15,6 +15,27 @@ SIP_PROTO= "sip"
 SIPS_PROTO= "sips"
 
 '''
+    simple
+'''
+RTP_SERVER0_IF = "eth1"
+RTP_SERVER0_PORT = "40000"
+SIP_SERVER0_IF = "eth1"
+SIP_SERVER0_PORT = "10000"
+SIP_SERVER0_ID = "0"
+
+RTP_CLIENT0_IF = "wlan0"
+RTP_CLIENT0_PORT = "44444"
+SIP_CLIENT0_IF = "wlan0"
+SIP_CLIENT0_PORT = "11111"
+SIP_CLIENT0_ID = "0"
+
+SIPP_SERVER0_FILE = "uas.xml"
+SIPP_CLIENT0_FILE = "uac.xml"
+
+SIPP_BASE_DIR       = "xml/"
+
+
+'''
     3pcc
 '''
 SIP_3PCC_TWIN_PORT = "9999"
@@ -53,12 +74,6 @@ SIPP_3PCC_CLIENT1_FILE = "1-3pcc-uac.xml"
 SIPP_3PCC_SERVER0_FILE = "0-3pcc-uas.xml"
 SIPP_3PCC_SERVER1_FILE = "1-3pcc-uas.xml"
 SIPP_3PCC_BASE_DIR = "xml/"
-
-
-'''
-    SIPP related
-'''
-SIPP_BASE_DIR       = "xml/"
 
 
 '''
