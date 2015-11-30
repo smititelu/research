@@ -1,7 +1,7 @@
 RUN=sudo python
 SCRIPT=run_test.py
 ARGS=1 1 1000
-TESTS=reinvite-uac reinvite-3pcc reinvite-proactive-3pcc reinvite-proactive-extension-3pcc refer-3pcc join-3pcc
+TESTS=reinvite-uac reinvite-uas reinvite-3pcc reinvite-proactive-3pcc reinvite-proactive-extension-3pcc refer-3pcc join-3pcc
 
 .PHONY: $(TESTS) all clean
 
@@ -9,6 +9,9 @@ ORDER=order
 
 REINVITE-UAC-DIR=reinvite-uac
 REINVITE-UAC-DIR-TITLE="reINVITE scenario - UAC trigger"
+
+REINVITE-UAS-DIR=reinvite-uas
+REINVITE-UAS-DIR-TITLE="reINVITE scenario - UAS trigger"
 
 REINVITE-3PCC-DIR=reinvite-3pcc
 REINVITE-3PCC-TITLE="3pcc reINVITE scenario"
@@ -30,6 +33,9 @@ all: $(TESTS)
 reinvite-uac:
 	$(RUN) $(SCRIPT) $(REINVITE-UAC-DIR) $(REINVITE-UAC-DIR-TITLE) $(ARGS)
 
+reinvite-uas:
+	$(RUN) $(SCRIPT) $(REINVITE-UAS-DIR) $(REINVITE-UAS-DIR-TITLE) $(ARGS)
+
 reinvite-3pcc:
 	$(RUN) $(SCRIPT) $(REINVITE-3PCC-DIR) $(REINVITE-3PCC-TITLE) $(ARGS)
 
@@ -47,6 +53,8 @@ join-3pcc:
 
 clean:
 	-@cd $(REINVITE-UAC-DIR); echo "cleaning" `pwd`; rm -rf *.pcap *.png *.out $(ORDER); cd ..
+	
+	-@cd $(REINVITE-UAS-DIR); echo "cleaning" `pwd`; rm -rf *.pcap *.png *.out $(ORDER); cd ..
 	
 	-@cd $(REINVITE-3PCC-DIR); echo "cleaning" `pwd`; rm -rf *.pcap *.png *.out $(ORDER); cd ..
 	
