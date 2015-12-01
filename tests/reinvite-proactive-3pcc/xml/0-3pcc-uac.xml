@@ -9,10 +9,6 @@
 
 <scenario name="3PCC client0 side">
 
-  <!-- pause to synchronize with server0 -->
-  <pause milliseconds="1000" crlf="true"/>
-
-
   <!-- 3pcc client0 sends INVITE -->
   <send>
     <![CDATA[

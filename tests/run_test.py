@@ -118,26 +118,6 @@ if re.search('3pcc', test_name):
     # start tcpdump capture
     helps.tcpdump_start(test_name + "/" + test_name + ".pcap")
 
-    # start uac 0
-    p = helps.sipp_3pcc_uac_start(
-        sip_client0_file,
-        sip_client0_ip, sip_client0_port,
-        rtp_client0_ip, rtp_client0_port,
-        sip_server0_ip, sip_server0_port,
-        sip_server0_user,
-        str(msg_nr), str(rate_nr), str(ratep_nr))
-    p.wait()
-
-    # start uac 1
-    p = helps.sipp_3pcc_uac_start(
-        sip_client1_file,
-        sip_client1_ip, sip_client1_port,
-        rtp_client1_ip, rtp_client1_port,
-        sip_server1_ip, sip_server1_port,
-        sip_server1_user,
-        str(msg_nr), str(rate_nr), str(ratep_nr))
-    p.wait()
-
     # start uas 1 - 3pcc B side
     p = helps.sipp_3pcc_uas_start(
         sip_server1_file,
@@ -159,6 +139,27 @@ if re.search('3pcc', test_name):
         sip_client0_user,
         str(msg_nr), str(rate_nr), str(ratep_nr))
     p.wait()
+
+    # start uac 1
+    p = helps.sipp_3pcc_uac_start(
+        sip_client1_file,
+        sip_client1_ip, sip_client1_port,
+        rtp_client1_ip, rtp_client1_port,
+        sip_server1_ip, sip_server1_port,
+        sip_server1_user,
+        str(msg_nr), str(rate_nr), str(ratep_nr))
+    p.wait()
+
+    # start uac 0
+    p = helps.sipp_3pcc_uac_start(
+        sip_client0_file,
+        sip_client0_ip, sip_client0_port,
+        rtp_client0_ip, rtp_client0_port,
+        sip_server0_ip, sip_server0_port,
+        sip_server0_user,
+        str(msg_nr), str(rate_nr), str(ratep_nr))
+    p.wait()
+
 
 else:
     # users

@@ -9,19 +9,19 @@
 
 <scenario name="3PCC server0 side">
 
-  <!-- 3pcc server0 sends INVITE -->
+  <!-- 3pcc client0 receives INVITE -->
+  <recv request="INVITE"> </recv>
+
   <send>
     <![CDATA[
 
-      INVITE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
-      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      From: server0 <sip:server0@[local_ip]:[local_port]>;tag=[call_number]
-      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
-      Call-ID: dialog0///[call_id]
-      CSeq: [cseq] INVITE
-      Contact: server0 <sip:server0@[local_ip]:[local_port]>
-      Max-Forwards: 70
-      Subject: Performance Test
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
       Content-Type: application/sdp
       Content-Length: [len]
 
@@ -31,35 +31,12 @@
       c=IN IP[media_ip_type] [media_ip]
       t=0 0
       m=audio [media_port] RTP/AVP 0
-      a=rtpmap:8 PCMA/8000
-      a=rtpmap:101 telephone-event/8000
-      a=fmtp:101 0-11,16
+      a=rtpmap:0 PCMU/8000
 
     ]]>
   </send>
 
-  <recv response="100" optional="true"> </recv>
-
-  <recv response="180" optional="true"> </recv>
-
-  <recv response="200" crlf="true"> </recv>
-
-  <send>
-    <![CDATA[
-
-      ACK sip:[service]@[remote_ip]:[remote_port] SIP/2.0
-      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      [last_From:]
-      [last_To:]
-      [last_Call-ID:]
-      CSeq: [cseq] ACK
-      Contact: server0 <sip:server0@[local_ip]:[local_port]>
-      Max-Forwards: 70
-      Subject: Performance Test
-      Content-Length: 0
-
-    ]]>
-  </send>
+  <recv request="ACK" crlf="true"> </recv>
 
 
   <!-- 3pcc server0 starts RTP media -->
