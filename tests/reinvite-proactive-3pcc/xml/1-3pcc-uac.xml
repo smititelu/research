@@ -64,6 +64,8 @@
 
   <recv response="100" optional="true"> </recv>
 
+  <recv response="180" optional="true"> </recv>
+
   <recv response="200"> </recv>
 
   <send crlf="true">
@@ -142,6 +144,8 @@
   </send>
 
   <recv response="100" optional="true"> </recv>
+
+  <recv response="180" optional="true"> </recv>
 
   <recv response="200"> </recv>
 
