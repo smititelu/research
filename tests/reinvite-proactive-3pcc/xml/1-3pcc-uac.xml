@@ -13,8 +13,23 @@
   <User variables="start_sec,start_msec,stop_sec,stop_msec" />
 
 
-  <!-- 3pcc client1 receives OPTIONS that will simulate handover trigger -->
-  <recv request="OPTIONS" crlf="true"> </recv>
+  <!-- 3pcc client1 receives OPTIONS that will trigger sendonly INVITE -->
+  <recv request="OPTIONS"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
 
 
   <!-- 3pcc client1 sends INVITE -->
@@ -71,6 +86,21 @@
 
   <!-- 3pcc client1 receives OPTIONS that will simulate handover trigger -->
   <recv request="OPTIONS" crlf="true"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
 
 
   <!-- 3pcc client1 starts handover timers -->
@@ -153,7 +183,7 @@
       SIP/2.0 200 OK
       [last_Via:]
       [last_From:]
-      [last_To:]
+      [last_To:];tag=[call_number]
       [last_Call-ID:]
       [last_CSeq:]
       Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>

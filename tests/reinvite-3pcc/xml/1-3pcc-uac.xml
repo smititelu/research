@@ -2,7 +2,7 @@
 <!DOCTYPE scenario SYSTEM "sipp.dtd">
 
 <!--    UAC wlan0          <==== UAS Controller ====>          UAC wlan1     -->
-<!--     client1           client1            client1           client1      -->
+<!--     client0           server0            server1           client1      -->
 <!--        |.................|..................|.................|         -->
 <!--        | <== SIP/RTP ==> | <== commands ==> | <== SIP/RTP ==> |         -->
 <!--        |......................................................|         -->
@@ -15,6 +15,23 @@
 
   <!-- 3pcc client1 receives OPTIONS that will simulate handover trigger -->
   <recv request="OPTIONS"> </recv>
+
+  <send>
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
+      Content-Type: application/sdp
+      Content-Length: 0
+
+    ]]>
+  </send>
+
 
 
   <!-- 3pcc client1 starts handover timers -->
@@ -31,8 +48,8 @@
 
       INVITE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      [last_From:]
-      [last_To:];tag=[call_number]
+      From: client1 <sip:client1@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
       [last_Call-ID:]
       CSeq: [cseq] INVITE
       Contact: client1 <sip:client1@[local_ip]:[local_port]>
@@ -90,7 +107,7 @@
 
 
   <!-- 3pcc client1 pause to receive some media -->
-  <pause milliseconds="1000" crlf="true"/>
+  <pause milliseconds="500" crlf="true"/>
 
 
   <!-- 3pcc client1 sends BYE -->
@@ -99,8 +116,8 @@
 
       BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      [last_From:]
-      [last_To:]
+      From: client1 <sip:client1@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
       [last_Call-ID:]
       CSeq: [cseq] BYE
       Contact: client1 <sip:client1@[local_ip]:[local_port]>

@@ -68,7 +68,7 @@
 
 
   <!-- 3pcc server0 sends request to trigger handover -->
-  <send crlf="true">
+  <send>
     <![CDATA[
 
       OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
@@ -86,6 +86,8 @@
 
     ]]>
   </send>
+
+  <recv response="200" crlf="true"> </recv>
 
 
   <!-- server0 receives BYE -->

@@ -14,7 +14,22 @@
 
 
   <!-- 3pcc client1 receives OPTIONS that will simulate handover trigger -->
-  <recv request="OPTIONS" crlf="true"> </recv>
+  <recv request="OPTIONS"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
 
 
   <!-- 3pcc client1 starts handover timers -->
@@ -87,29 +102,23 @@
   </nop>
 
 
-  <!-- 3pcc client1 receives OPTIONS that will end scenario -->
-  <recv request="OPTIONS" crlf="true"> </recv>
+  <!-- 3pcc client1 receives BYE -->
+  <recv request="BYE"> </recv>
 
-
-  <!-- 3pcc client1 sends BYE -->
-  <send>
+  <send crlf="true">
     <![CDATA[
 
-      BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
-      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      SIP/2.0 200 OK
+      [last_Via:]
       [last_From:]
-      [last_To:]
+      [last_To:];tag=[call_number]
       [last_Call-ID:]
-      CSeq: [cseq] BYE
-      Contact: client1 <sip:client1@[local_ip]:[local_port]>
-      Max-Forwards: 70
-      Subject: Performance Test
+      [last_CSeq:]
+      Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
       Content-Length: 0
 
     ]]>
   </send>
-
-  <recv response="200" crlf="true"> </recv>
 
 
   <!-- pause to capture complete traffic -->

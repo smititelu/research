@@ -9,7 +9,7 @@
 
 <scenario name="3PCC client0 side">
 
-  <!-- pause to synchronize with the server0  -->
+  <!-- pause to synchronize with the client0  -->
   <pause milliseconds="1000" crlf="true"/>
 
 
@@ -63,29 +63,23 @@
   </send>
 
 
-  <!-- 3pcc client0 receives OPTIONS that will terminate media session on wlan0 -->
-  <recv request="OPTIONS" crlf="true"> </recv>
+  <!-- 3pcc client0 receives BYE -->
+  <recv request="BYE"> </recv>
 
-
-  <!-- 3pcc client0 sends BYE -->
-  <send>
+  <send crlf="true">
     <![CDATA[
 
-      BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
-      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      SIP/2.0 200 OK
+      [last_Via:]
       [last_From:]
-      [last_To:]
+      [last_To:];tag=[call_number]
       [last_Call-ID:]
-      CSeq: [cseq] BYE
-      Contact: client0 <sip:client0@[local_ip]:[local_port]>
-      Max-Forwards: 70
-      Subject: Performance Test
+      [last_CSeq:]
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
       Content-Length: 0
 
     ]]>
   </send>
-
-  <recv response="200" crlf="true"> </recv>
 
 
   <!-- pause to capture complete traffic -->

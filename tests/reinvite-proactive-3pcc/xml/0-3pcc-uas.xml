@@ -48,10 +48,10 @@
 
 
   <!-- pause to capture some RTP media -->
-  <pause milliseconds="1000" crlf="true"/>
+  <pause milliseconds="500" crlf="true"/>
 
 
-  <!-- 3pcc server0 sends command that will trigger second interface invite -->
+  <!-- 3pcc server0 sends command that will trigger sendonly + handover -->
   <sendCmd crlf="true">
     <![CDATA[
       Call-ID: [call_id]
@@ -59,41 +59,8 @@
   </sendCmd>
 
 
-  <!-- 3pcc server0 receives command that triggered second interface invite -->
+  <!-- 3pcc server0 receives command that triggered sendonly + handover -->
   <recvCmd crlf="true"> </recvCmd>
-
-
-  <!-- 3pcc server0 sends command that will trigger handover -->
-  <sendCmd crlf="true">
-    <![CDATA[
-      Call-ID: [call_id]
-    ]]>
-  </sendCmd>
-
-
-  <!-- 3pcc server0 receives command to terminate scenario -->
-  <recvCmd crlf="true"> </recvCmd>
-
-
-  <!-- 3pcc server0 sends request to trigger handover -->
-  <send>
-    <![CDATA[
-
-      OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
-      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      From: server0 <sip:server0@[local_ip]:[local_port]>;tag=[call_number]
-      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
-      Call-ID: [call_id]
-      CSeq: [cseq] OPTIONS
-      Contact: server0 <sip:server0@[local_ip]:[local_port]>
-      Max-Forwards: 70
-      Subject: Performance Test
-      Allow: INVITE,ACK,CANCEL,OPTIONS,BYE,REFER,SUBSCRIBE,NOTIFY,INFO
-      Supported: replaces
-      Content-Length: 0
-
-    ]]>
-  </send>
 
 
   <!-- pause to capture complete traffic -->

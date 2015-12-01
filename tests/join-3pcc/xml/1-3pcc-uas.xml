@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE scenario SYSTEM "server1.dtd">
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
 
 <!--    UAC wlan0          <==== UAS Controller ====>          UAC wlan1     -->
 <!--     client0           server0            server1           client1      -->
@@ -8,6 +8,10 @@
 <!--        |......................................................|         -->
 
 <scenario name="3PCC server1 side">
+
+  <!-- 3pcc server1 user variables to measure handover time -->
+  <User variables="start_sec,start_msec,stop_sec,stop_msec" />
+
 
   <!-- 3pcc server1 receives command -->
   <recvCmd crlf="true"> </recvCmd>
@@ -20,7 +24,7 @@
       OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       From: server1 <sip:server1@[local_ip]:[local_port]>;tag=[call_number]
-      To: [service] <sip:[service]@[remote_ip]:[remote_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
       Call-ID: dialog0///[call_id]
       CSeq: [cseq] OPTIONS
       Contact: server1 <sip:server1@[local_ip]:[local_port]>
@@ -32,6 +36,16 @@
 
     ]]>
   </send>
+
+  <recv response="200" crlf="true"> </recv>
+
+
+  <!-- 3pcc server1 starts handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="start_sec,start_msec" />
+    </action>
+  </nop>
 
 
   <!-- 3pcc server1 receives handover INVITE -->
@@ -99,6 +113,25 @@
   <recvCmd crlf="true"> </recvCmd>
 
 
+  <!-- 3pcc server1 stops handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="stop_sec,stop_msec" />
+      <subtract assign_to="stop_sec" variable="start_sec" />
+      <subtract assign_to="stop_msec" variable="start_msec" />
+      <exec command="echo [$stop_sec] [$stop_msec] >> join-3pcc/time.out" />
+    </action>
+  </nop>
+
+
+  <!-- 3pcc server1 sends command -->
+  <sendCmd crlf="true">
+    <![CDATA[
+      Call-ID: [call_id]
+    ]]>
+  </sendCmd>
+
+
   <!-- 3pcc server1 sends BYE -->
   <send>
     <![CDATA[
@@ -106,7 +139,7 @@
       BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       From: server1 <sip:server1@[local_ip]:[local_port]>;tag=2-[call_number]
-      To: [service] <sip:[service]@[remote_ip]:[remote_port]>;tag=2-[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
       [last_Call-ID:]
       CSeq: [cseq] BYE
       Contact: server1 <sip:server1@[local_ip]:[local_port]>
@@ -118,14 +151,6 @@
   </send>
 
   <recv response="200" crlf="true"> </recv>
-
-
-  <!-- 3pcc server1 sends command -->
-  <sendCmd crlf="true">
-    <![CDATA[
-      Call-ID: [call_id]
-    ]]>
-  </sendCmd>
 
 
   <!-- pause to capture complete traffic -->

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE scenario SYSTEM ".dtd">
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
 
 <!--    UAC wlan0          <==== UAS Controller ====>          UAC wlan1     -->
 <!--     client0           server0            server1           client1      -->
@@ -8,9 +8,6 @@
 <!--        |......................................................|         -->
 
 <scenario name="3PCC server0 side">
-  <!-- 3pcc server0 user variables to measure handover time -->
-  <User variables="start_sec,start_msec,stop_sec,stop_msec" />
-
 
   <!-- 3pcc server0 receives INVITE -->
   <recv request="INVITE"> </recv>
@@ -65,14 +62,6 @@
   </nop>
 
 
-  <!-- 3pcc server0 starts handover timers -->
-  <nop>
-    <action>
-      <gettimeofday assign_to="start_sec,start_msec" />
-    </action>
-  </nop>
-
-
   <!-- 3pcc server0 sends command -->
   <sendCmd crlf="true">
     <![CDATA[
@@ -92,7 +81,7 @@
       BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       From: server0 <sip:server0@[local_ip]:[local_port]>;tag=[call_number]
-      To: [service] <sip:[service]@[remote_ip]:[remote_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
       [last_Call-ID:]
       CSeq: [cseq] BYE
       Contact: server0 <sip:server0@[local_ip]:[local_port]>
@@ -104,17 +93,6 @@
   </send>
 
   <recv response="200" crlf="true"> </recv>
-
-
-  <!-- 3pcc server1 stops handover timers -->
-  <nop>
-    <action>
-      <gettimeofday assign_to="stop_sec,stop_msec" />
-      <subtract assign_to="stop_sec" variable="start_sec" />
-      <subtract assign_to="stop_msec" variable="start_msec" />
-      <exec command="echo [$stop_sec] [$stop_msec] >> join-3pcc/time.out" />
-    </action>
-  </nop>
 
 
   <!-- 3pcc server0 sends command -->

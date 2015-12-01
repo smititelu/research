@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE scenario SYSTEM ".dtd">
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
 
 <!--    UAC wlan0          <==== UAS Controller ====>          UAC wlan1     -->
 <!--     client0           server0            server1           client1      -->
@@ -68,7 +68,7 @@
   </nop>
 
   <!-- 3pcc server0 pause to send media -->
-  <pause milliseconds="1000" crlf="true"/>
+  <pause milliseconds="500" crlf="true"/>
 
   <!-- 3pcc server0 sends command that will simulate handover trigger -->
   <sendCmd crlf="true">

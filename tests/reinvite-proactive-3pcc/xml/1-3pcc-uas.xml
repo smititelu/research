@@ -13,8 +13,8 @@
   <recvCmd crlf="true"> </recvCmd>
 
 
-  <!-- 3pcc server1 sends request to trigger second interface invite -->
-  <send crlf="true">
+  <!-- 3pcc server1 sends request to trigger second interface sendonly invite -->
+  <send>
     <![CDATA[
 
       OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
@@ -32,6 +32,8 @@
 
     ]]>
   </send>
+
+  <recv response="200" crlf="true"> </recv>
 
 
   <!-- 3pcc server1 receives INVITE -->
@@ -64,20 +66,8 @@
   <recv request="ACK" crlf="true"> </recv>
 
 
-  <!-- 3pcc server1 sends command that will trigger second interface invite -->
-  <sendCmd crlf="true">
-    <![CDATA[
-      Call-ID: [call_id]
-    ]]>
-  </sendCmd>
-
-
-  <!-- 3pcc server1 receives command that will trigger handover -->
-  <recvCmd crlf="true"> </recvCmd>
-
-
   <!-- 3pcc server1 sends request to trigger handover -->
-  <send crlf="true">
+  <send>
     <![CDATA[
 
       OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
@@ -95,6 +85,8 @@
 
     ]]>
   </send>
+
+  <recv response="200" crlf="true"> </recv>
 
 
   <!-- 3pcc server1 receives INVITE -->
@@ -135,11 +127,7 @@
   </nop>
 
 
-  <!-- pause to capture some RTP media -->
-  <pause milliseconds="500" crlf="true"/>
-
-
-  <!-- 3pcc server1 sends command that triggered handover -->
+  <!-- 3pcc server1 sends command that triggered sendonly + handover -->
   <sendCmd crlf="true">
     <![CDATA[
       Call-ID: [call_id]
@@ -157,8 +145,8 @@
 
       BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      [last_From:]
-      [last_To:]
+      From: server1 <sip:server1@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
       [last_Call-ID:]
       CSeq: [cseq] BYE
       Contact: server1 <sip:server1@[local_ip]:[local_port]>

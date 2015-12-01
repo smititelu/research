@@ -64,44 +64,25 @@
   <recvCmd crlf="true"> </recvCmd>
 
 
-  <!-- 3pcc server0 sends request to trigger handover -->
-  <send crlf="true">
+  <!-- 3pcc server0 sends BYE -->
+  <send>
     <![CDATA[
 
-      OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       From: server0 <sip:server0@[local_ip]:[local_port]>;tag=[call_number]
       To: [service] <sip:[service]@[remote_ip]:[remote_port]>
-      Call-ID: dialog0///[call_id]
-      CSeq: [cseq] OPTIONS
+      [last_Call-ID:]
+      CSeq: [cseq] BYE
       Contact: server0 <sip:server0@[local_ip]:[local_port]>
       Max-Forwards: 70
       Subject: Performance Test
-      Allow: INVITE,ACK,CANCEL,OPTIONS,BYE,REFER,SUBSCRIBE,NOTIFY,INFO
-      Supported: replaces
       Content-Length: 0
 
     ]]>
   </send>
 
-
-  <!-- 3pcc server0 receives BYE -->
-  <recv request="BYE"> </recv>
-
-  <send crlf="true">
-    <![CDATA[
-
-      SIP/2.0 200 OK
-      [last_Via:]
-      [last_From:]
-      [last_To:];tag=[call_number]
-      [last_Call-ID:]
-      [last_CSeq:]
-      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
-      Content-Length: 0
-
-    ]]>
-  </send>
+  <recv response="200" crlf="true"> </recv>
 
 
   <!-- 3pcc server0 sends command that will end scenario -->
