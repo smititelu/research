@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE scenario SYSTEM "server1.dtd">
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
 
 <!--    UAC wlan0          <==== UAS Controller ====>          UAC wlan1     -->
 <!--     client0           server0            server1           client1      -->

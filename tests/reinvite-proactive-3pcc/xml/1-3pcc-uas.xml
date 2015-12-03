@@ -66,6 +66,18 @@
   <recv request="ACK" crlf="true"> </recv>
 
 
+  <!-- 3pcc server1 starts RTP media -->
+  <nop crlf="true">
+    <action>
+      <exec play_pcap_audio="reinvite-proactive-3pcc/xml/g711a.pcap"/>
+    </action>
+  </nop>
+
+
+  <!-- pause to capture some RTP media -->
+  <pause milliseconds="500" crlf="true"/>
+
+
   <!-- 3pcc server1 sends request to trigger handover -->
   <send>
     <![CDATA[

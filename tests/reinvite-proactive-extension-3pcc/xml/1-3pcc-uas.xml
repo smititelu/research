@@ -21,7 +21,7 @@
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       From: server1 <sip:server1@[local_ip]:[local_port]>;tag=[call_number]
       To: [service] <sip:[service]@[remote_ip]:[remote_port]>
-      Call-ID: dialog1///[call_id]
+      Call-ID: dialog0///[call_id]
       CSeq: [cseq] OPTIONS
       Contact: server1 <sip:server1@[local_ip]:[local_port]>
       Max-Forwards: 70

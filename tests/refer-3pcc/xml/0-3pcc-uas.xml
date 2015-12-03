@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE scenario SYSTEM ".dtd">
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
 
 <!--    UAC wlan0          <==== UAS Controller ====>          UAC wlan1     -->
 <!--     client0           server0            server1           client1      -->
@@ -9,7 +9,7 @@
 
 <scenario name="3PCC server0 side">
 
-  <!-- 3pcc client0 receives INVITE -->
+  <!-- 3pcc server0 receives INVITE -->
   <recv request="INVITE"> </recv>
 
   <send>
@@ -21,7 +21,7 @@
       [last_To:];tag=[call_number]
       [last_Call-ID:]
       [last_CSeq:]
-      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
       Content-Type: application/sdp
       Content-Length: [len]
 
@@ -45,6 +45,33 @@
       <exec play_pcap_audio="refer-3pcc/xml/g711a.pcap"/>
     </action>
   </nop>
+
+
+  <!-- 3pcc server0 pause to receive RTP media -->
+  <pause milliseconds="500" crlf="true"/>
+
+
+  <!-- 3pcc server0 triggers handover -->
+  <send>
+    <![CDATA[
+
+      OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: server0 <sip:server0@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      Call-ID: dialog0///[call_id]
+      CSeq: [cseq] OPTIONS
+      Contact: server0 <sip:server0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Allow: INVITE,ACK,CANCEL,OPTIONS,BYE,REFER,SUBSCRIBE,NOTIFY,INFO
+      Supported: replaces
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true"> </recv>
 
 
   <!-- 3pcc server0 receives REFER -->
