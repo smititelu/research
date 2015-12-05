@@ -9,10 +9,6 @@
 
 <scenario name="3PCC server1 side">
 
-  <!-- 3pcc server1 user variables to measure handover time -->
-  <User variables="start_sec,start_msec,stop_sec,stop_msec" />
-
-
   <!-- 3pcc server1 receives command -->
   <recvCmd crlf="true"> </recvCmd>
 
@@ -38,14 +34,6 @@
   </send>
 
   <recv response="200" crlf="true"> </recv>
-
-
-  <!-- 3pcc server1 starts handover timers -->
-  <nop>
-    <action>
-      <gettimeofday assign_to="start_sec,start_msec" />
-    </action>
-  </nop>
 
 
   <!-- 3pcc server1 receives handover INVITE -->
@@ -96,25 +84,6 @@
 
   <!-- 3pcc server1 receives command -->
   <recvCmd crlf="true"> </recvCmd>
-
-
-  <!-- 3pcc server1 stops handover timers -->
-  <nop>
-    <action>
-      <gettimeofday assign_to="stop_sec,stop_msec" />
-      <subtract assign_to="stop_sec" variable="start_sec" />
-      <subtract assign_to="stop_msec" variable="start_msec" />
-      <exec command="echo [$stop_sec] [$stop_msec] >> join-3pcc/time.out" />
-    </action>
-  </nop>
-
-
-  <!-- 3pcc server1 sends command -->
-  <sendCmd crlf="true">
-    <![CDATA[
-      Call-ID: [call_id]
-    ]]>
-  </sendCmd>
 
 
   <!-- 3pcc server1 sends BYE -->

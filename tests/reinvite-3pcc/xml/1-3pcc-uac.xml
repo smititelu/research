@@ -33,7 +33,6 @@
   </send>
 
 
-
   <!-- 3pcc client1 starts handover timers -->
   <nop>
     <action>

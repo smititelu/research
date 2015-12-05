@@ -9,6 +9,10 @@
 
 <scenario name="3PCC client1 side">
 
+  <!-- 3pcc client1 user variables to measure handover time -->
+  <User variables="start_sec,start_msec,stop_sec,stop_msec" />
+
+
   <!-- 3pcc client1 receives INVITE -->
   <recv request="OPTIONS"> </recv>
 
@@ -26,6 +30,14 @@
 
     ]]>
   </send>
+
+
+  <!-- 3pcc client1 starts handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="start_sec,start_msec" />
+    </action>
+  </nop>
 
 
   <!-- 3pcc client1 sends INVITE -->
@@ -81,6 +93,17 @@
 
     ]]>
   </send>
+
+
+  <!-- 3pcc client1 stops handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="stop_sec,stop_msec" />
+      <subtract assign_to="stop_sec" variable="start_sec" />
+      <subtract assign_to="stop_msec" variable="start_msec" />
+      <exec command="echo [$stop_sec] [$stop_msec] >> join-3pcc/time.out" />
+    </action>
+  </nop>
 
 
   <!-- 3pcc client1 receives BYE -->
