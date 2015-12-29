@@ -96,17 +96,17 @@ if re.search('3pcc', test_name):
     sip_twin_port = defs.SIP_3PCC_TWIN_PORT
 
     # ip
-    sip_server0_ip = "192.168.0.16"
-    sip_server1_ip = "192.168.0.16"
+    sip_server0_ip = defs.SIP_3PCC_SERVER0_IP
+    sip_server1_ip = defs.SIP_3PCC_SERVER1_IP
 
-    rtp_server0_ip = "192.168.0.16"
-    rtp_server1_ip = "192.168.0.16"
+    rtp_server0_ip = defs.RTP_3PCC_SERVER0_IP
+    rtp_server1_ip = defs.RTP_3PCC_SERVER1_IP
 
-    sip_client0_ip = "192.168.0.11"
-    sip_client1_ip = "192.168.0.14"
+    sip_client0_ip = defs.SIP_3PCC_CLIENT0_IP
+    sip_client1_ip = defs.SIP_3PCC_CLIENT1_IP
 
-    rtp_client0_ip = "192.168.0.11"
-    rtp_client1_ip = "192.168.0.14"
+    rtp_client0_ip = defs.RTP_3PCC_CLIENT0_IP
+    rtp_client1_ip = defs.RTP_3PCC_CLIENT1_IP
 
     # files
     sip_server0_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_SERVER0_FILE
@@ -163,11 +163,11 @@ else:
     rtp_client0_port = defs.RTP_3PCC_CLIENT0_PORT
 
     # ip
-    sip_server0_ip = "192.168.0.16"
-    rtp_server0_ip = "192.168.0.16"
+    sip_server0_ip = defs.SIP_SERVER0_IP
+    rtp_server0_ip = defs.RTP_SERVER0_IP
 
-    sip_client0_ip = "192.168.0.11"
-    rtp_client0_ip = "192.168.0.11"
+    sip_client0_ip = defs.SIP_CLIENT0_IP
+    rtp_client0_ip = defs.RTP_CLIENT0_IP
 
     #file
     sip_server0_file = test_name + "/" + defs.SIPP_BASE_DIR + defs.SIPP_SERVER0_FILE
