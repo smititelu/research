@@ -1,0 +1,2 @@
+kamctl add user1@mykamailio user1pwd
+kamctl add user2@mykamailio user2pwd
