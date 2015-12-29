@@ -96,17 +96,17 @@ if re.search('3pcc', test_name):
     sip_twin_port = defs.SIP_3PCC_TWIN_PORT
 
     # ip
-    sip_server0_ip = helps.get_ip_addr(sip_server0_if)
-    sip_server1_ip = helps.get_ip_addr(sip_server1_if)
+    sip_server0_ip = "192.168.0.16"
+    sip_server1_ip = "192.168.0.16"
 
-    rtp_server0_ip = helps.get_ip_addr(rtp_server0_if)
-    rtp_server1_ip = helps.get_ip_addr(rtp_server1_if)
+    rtp_server0_ip = "192.168.0.16"
+    rtp_server1_ip = "192.168.0.16"
 
-    sip_client0_ip = helps.get_ip_addr(sip_client0_if)
-    sip_client1_ip = helps.get_ip_addr(sip_client1_if)
+    sip_client0_ip = "192.168.0.11"
+    sip_client1_ip = "192.168.0.14"
 
-    rtp_client0_ip = helps.get_ip_addr(rtp_client0_if)
-    rtp_client1_ip = helps.get_ip_addr(rtp_client1_if)
+    rtp_client0_ip = "192.168.0.11"
+    rtp_client1_ip = "192.168.0.14"
 
     # files
     sip_server0_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_SERVER0_FILE
@@ -163,11 +163,11 @@ else:
     rtp_client0_port = defs.RTP_3PCC_CLIENT0_PORT
 
     # ip
-    sip_server0_ip = helps.get_ip_addr(sip_server0_if)
-    rtp_server0_ip = helps.get_ip_addr(rtp_server0_if)
+    sip_server0_ip = "192.168.0.16"
+    rtp_server0_ip = "192.168.0.16"
 
-    sip_client0_ip = helps.get_ip_addr(sip_client0_if)
-    rtp_client0_ip = helps.get_ip_addr(rtp_client0_if)
+    sip_client0_ip = "192.168.0.11"
+    rtp_client0_ip = "192.168.0.11"
 
     #file
     sip_server0_file = test_name + "/" + defs.SIPP_BASE_DIR + defs.SIPP_SERVER0_FILE

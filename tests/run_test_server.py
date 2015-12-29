@@ -96,17 +96,17 @@ if re.search('3pcc', test_name):
     sip_twin_port = defs.SIP_3PCC_TWIN_PORT
 
     # ip
-    sip_server0_ip = helps.get_ip_addr(sip_server0_if)
-    sip_server1_ip = helps.get_ip_addr(sip_server1_if)
+    sip_server0_ip = "192.168.0.16"
+    sip_server1_ip = "192.168.0.16"
 
-    rtp_server0_ip = helps.get_ip_addr(rtp_server0_if)
-    rtp_server1_ip = helps.get_ip_addr(rtp_server1_if)
+    rtp_server0_ip = "192.168.0.16"
+    rtp_server1_ip = "192.168.0.16"
 
-    sip_client0_ip = helps.get_ip_addr(sip_client0_if)
-    sip_client1_ip = helps.get_ip_addr(sip_client1_if)
+    sip_client0_ip = "192.168.0.11"
+    sip_client1_ip = "192.168.0.14"
 
-    rtp_client0_ip = helps.get_ip_addr(rtp_client0_if)
-    rtp_client1_ip = helps.get_ip_addr(rtp_client1_if)
+    rtp_client0_ip = "192.168.0.11"
+    rtp_client1_ip = "192.168.0.14"
 
     # files
     sip_server0_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_SERVER0_FILE
@@ -114,9 +114,6 @@ if re.search('3pcc', test_name):
 
     sip_client0_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_CLIENT0_FILE
     sip_client1_file = test_name + "/" + defs.SIPP_3PCC_BASE_DIR + defs.SIPP_3PCC_CLIENT1_FILE
-
-    # start tcpdump capture
-    helps.tcpdump_start(test_name + "/" + test_name + ".pcap")
 
     # start uas 1 - 3pcc B side
     p = helps.sipp_3pcc_uas_start(
@@ -165,18 +162,15 @@ else:
     rtp_client0_port = defs.RTP_3PCC_CLIENT0_PORT
 
     # ip
-    sip_server0_ip = helps.get_ip_addr(sip_server0_if)
-    rtp_server0_ip = helps.get_ip_addr(rtp_server0_if)
+    sip_server0_ip = "192.168.0.16"
+    rtp_server0_ip = "192.168.0.16"
 
-    sip_client0_ip = helps.get_ip_addr(sip_client0_if)
-    rtp_client0_ip = helps.get_ip_addr(rtp_client0_if)
+    sip_client0_ip = "192.168.0.11"
+    rtp_client0_ip = "192.168.0.11"
 
     #file
     sip_server0_file = test_name + "/" + defs.SIPP_BASE_DIR + defs.SIPP_SERVER0_FILE
     sip_client0_file = test_name + "/" + defs.SIPP_BASE_DIR + defs.SIPP_CLIENT0_FILE
-
-    # start tcpdump capture
-    helps.tcpdump_start(test_name + "/" + test_name + ".pcap")
 
     # start uas 0
     p = helps.sipp_uas_start(
@@ -192,25 +186,3 @@ else:
 # wait for sipp scenario to stop
 while helps.process_is_running("sipp"):
     1;
-
-# stop tcpdump
-helps.tcpdump_stop()
-
-# start processing callflow flow only for one sip msg
-if msg_nr == 1:
-    # create order file used for ca
-    fd=open(order, "w+")
-    print >> fd, sip_client0_ip + ":.* UAC wlan0"
-    print >> fd, sip_server0_ip + ":.* UAS server0"
-    if sip_server0_ip != sip_server1_ip and sip_server1_ip != "":
-        print >> fd, sip_server1_ip + ":.* UAS server1"
-    if sip_client1_ip != "":
-        print >> fd, sip_client1_ip + ":.* UAC wlan1"
-    fd.close()
-
-    p = helps.flow_start(test_name, test_title)
-    p.wait()
-
-# start processing results
-p = helps.result_start(test_name, test_title)
-p.wait()
