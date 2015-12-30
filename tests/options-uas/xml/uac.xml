@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
+
+<!--    UAC wlan0         UAC wlan1     -->
+<!--     client0           server0      -->
+<!--        |.................|         -->
+<!--        | <== SIP/RTP ==> |         -->
+<!--        |.................|         -->
+
+
+<scenario name="UAC client0 side">
+
+  <!-- client0 user variables to measure handover time -->
+  <User variables="start_sec,start_msec,stop_sec,stop_msec" />
+
+
+  <!-- client0 sends INVITE -->
+  <send>
+    <![CDATA[
+
+      INVITE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: client0 <sip:client0@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      Call-ID: dialog0///[call_id]
+      CSeq: [cseq] INVITE
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Geolocation: <cid:dialog0///[call_id]>
+      Geolocation-Routing: yes
+      Accept: application/pidf+xml
+      Content-Type: multipart/mixed; boundary=boundary1
+      Content-Length: [len]
+
+      --boundary1
+
+      Content-Type: application/sdp
+
+      v=0
+      o=user1 53655765 2353687637 IN IP[media_ip_type] [media_ip]
+      s=-
+      c=IN IP[media_ip_type] [media_ip]
+      t=0 0
+      m=audio [media_port] RTP/AVP 0
+      a=rtpmap:8 PCMA/8000
+      a=rtpmap:101 telephone-event/8000
+      a=fmtp:101 0-11,16
+
+      --boundary1
+
+      Content-Type: application/pidf+xml
+      <?xml version="1.0" encoding="UTF-8"?>
+      <pos:position xmlns:pos="pos-namespace">
+      <pos:x>0</pos:x>
+      <pos:y>0</pos:y>
+      </pos:position>
+
+      --boundary1
+
+    ]]>
+  </send>
+
+  <recv response="100" optional="true"> </recv>
+
+  <recv response="180" optional="true"> </recv>
+
+  <recv response="200" crlf="true"> </recv>
+
+  <send>
+    <![CDATA[
+
+      ACK sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      [last_From:]
+      [last_To:]
+      [last_Call-ID:]
+      CSeq: [cseq] ACK
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- client0 pause to simulate movement -->
+  <pause milliseconds=="1000" crlf="true"/>
+
+
+  <!--  client0 sends OPTION with geolocation data -->
+  <send>
+    <![CDATA[
+
+      OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: client0 <sip:client0@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      [last_Call-ID:]
+      CSeq: [cseq] OPTIONS
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Allow: INVITE,ACK,CANCEL,OPTIONS,BYE,REFER,SUBSCRIBE,NOTIFY,INFO
+      Supported: replaces
+      Content-Type: multipart/mixed; boundary=boundary1
+      Geolocation: <cid:dialog0///[call_id]>
+      Geolocation-Routing: yes
+      Accept: application/pidf+xml
+      Content-Length: [len]
+
+      --boundary1
+
+      Content-Type: application/pidf+xml
+      <?xml version="1.0" encoding="UTF-8"?>
+      <pos:position xmlns:pos="pos-namespace">
+      <pos:x>1</pos:x>
+      <pos:y>1</pos:y>
+      </pos:position>
+
+      --boundary1
+
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true"> </recv>
+
+
+  <!-- client0 pause to simulate movement -->
+  <pause milliseconds=="1000" crlf="true"/>
+
+
+  <!--  client0 sends OPTION with geolocation data -->
+  <send>
+    <![CDATA[
+
+      OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: client0 <sip:client0@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      [last_Call-ID:]
+      CSeq: [cseq] OPTIONS
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Allow: INVITE,ACK,CANCEL,OPTIONS,BYE,REFER,SUBSCRIBE,NOTIFY,INFO
+      Supported: replaces
+      Content-Type: multipart/mixed; boundary=boundary1
+      Geolocation: <cid:dialog0///[call_id]>
+      Geolocation-Routing: yes
+      Accept: application/pidf+xml
+      Content-Length: [len]
+
+      --boundary1
+
+      Content-Type: application/pidf+xml
+      <?xml version="1.0" encoding="UTF-8"?>
+      <pos:position xmlns:pos="pos-namespace">
+      <pos:x>2</pos:x>
+      <pos:y>2</pos:y>
+      </pos:position>
+
+      --boundary1
+
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true"> </recv>
+
+
+  <!-- client0 pause to simulate movement -->
+  <pause milliseconds=="1000" crlf="true"/>
+
+
+  <!--  client0 sends OPTION with geolocation data -->
+  <send>
+    <![CDATA[
+
+      OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: client0 <sip:client0@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      [last_Call-ID:]
+      CSeq: [cseq] OPTIONS
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Allow: INVITE,ACK,CANCEL,OPTIONS,BYE,REFER,SUBSCRIBE,NOTIFY,INFO
+      Supported: replaces
+      Content-Type: multipart/mixed; boundary=boundary1
+      Geolocation: <cid:dialog0///[call_id]>
+      Geolocation-Routing: yes
+      Accept: application/pidf+xml
+      Content-Length: [len]
+
+      --boundary1
+
+      Content-Type: application/pidf+xml
+      <?xml version="1.0" encoding="UTF-8"?>
+      <pos:position xmlns:pos="pos-namespace">
+      <pos:x>3</pos:x>
+      <pos:y>3</pos:y>
+      </pos:position>
+
+      --boundary1
+
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true"> </recv>
+
+
+  <!-- client0 pause to simulate movement -->
+  <pause milliseconds=="1000" crlf="true"/>
+
+
+  <!--  client0 sends OPTION with geolocation data -->
+  <send>
+    <![CDATA[
+
+      OPTIONS sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: client0 <sip:client0@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      [last_Call-ID:]
+      CSeq: [cseq] OPTIONS
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Allow: INVITE,ACK,CANCEL,OPTIONS,BYE,REFER,SUBSCRIBE,NOTIFY,INFO
+      Supported: replaces
+      Content-Type: multipart/mixed; boundary=boundary1
+      Geolocation: <cid:dialog0///[call_id]>
+      Geolocation-Routing: yes
+      Accept: application/pidf+xml
+      Content-Length: [len]
+
+      --boundary1
+
+      Content-Type: application/pidf+xml
+      <?xml version="1.0" encoding="UTF-8"?>
+      <pos:position xmlns:pos="pos-namespace">
+      <pos:x>4</pos:x>
+      <pos:y>4</pos:y>
+      </pos:position>
+
+      --boundary1
+
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true"> </recv>
+
+
+  <!-- client0 receives OPTIONS-->
+  <recv request="OPTIONS"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: client0 <sip:client0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- client0 starts handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="start_sec,start_msec" />
+    </action>
+  </nop>
+
+
+  <!-- client0 sends BYE -->
+  <send>
+    <![CDATA[
+
+      BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: client0 <sip:client0@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      [last_Call-ID:]
+      CSeq: [cseq] BYE
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true"> </recv>
+
+
+  <!-- client0 sends INVITE -->
+  <send>
+    <![CDATA[
+
+      INVITE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: client0 <sip:client0@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      Call-ID: dialog1///[call_id]
+      CSeq: [cseq] INVITE
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Content-Type: application/sdp
+      Content-Length: [len]
+
+      v=0
+      o=user1 53655765 2353687637 IN IP[media_ip_type] [media_ip]
+      s=-
+      c=IN IP[media_ip_type] [media_ip]
+      t=0 0
+      m=audio [media_port] RTP/AVP 0
+      a=rtpmap:8 PCMA/8000
+      a=rtpmap:101 telephone-event/8000
+      a=fmtp:101 0-11,16
+
+    ]]>
+  </send>
+
+  <recv response="100" optional="true"> </recv>
+
+  <recv response="180" optional="true"> </recv>
+
+  <recv response="200" crlf="true"> </recv>
+
+  <send>
+    <![CDATA[
+
+      ACK sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      [last_From:]
+      [last_To:]
+      [last_Call-ID:]
+      CSeq: [cseq] ACK
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- client0 stops handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="stop_sec,stop_msec" />
+      <subtract assign_to="stop_sec" variable="start_sec" />
+      <subtract assign_to="stop_msec" variable="start_msec" />
+      <exec command="echo [$stop_sec] [$stop_msec] >> options-uas/time.out" />
+    </action>
+  </nop>
+
+
+  <!-- client0 pause to receive media -->
+  <pause milliseconds=="1000" crlf="true"/>
+
+
+  <!-- client0 sends BYE -->
+  <send>
+    <![CDATA[
+
+      BYE sip:[service]@[remote_ip]:[remote_port] SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: client0 <sip:client0@[local_ip]:[local_port]>;tag=[call_number]
+      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      [last_Call-ID:]
+      CSeq: [cseq] BYE
+      Contact: client0 <sip:client0@[local_ip]:[local_port]>
+      Max-Forwards: 70
+      Subject: Performance Test
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true"> </recv>
+
+
+  <!-- pause to capture complete traffic -->
+  <pause milliseconds="1000" crlf="true"/>
+
+</scenario>

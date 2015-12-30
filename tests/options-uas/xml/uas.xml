@@ -43,13 +43,85 @@
   <!-- server0 starts RTP media -->
   <nop>
     <action>
-      <exec play_pcap_audio="reinvite-uas/xml/g711a.pcap"/>
+      <exec play_pcap_audio="options-uas/xml/g711a.pcap"/>
     </action>
   </nop>
 
 
-  <!-- server0 pause to receive media -->
-  <pause milliseconds=="500" crlf="true"/>
+  <!-- server0 receives OPTIONS-->
+  <recv request="OPTIONS"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- server0 receives OPTIONS-->
+  <recv request="OPTIONS"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- server0 receives OPTIONS-->
+  <recv request="OPTIONS"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
+
+
+  <!-- server0 receives OPTIONS-->
+  <recv request="OPTIONS"> </recv>
+
+  <send crlf="true">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:];tag=[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Contact: server0 <sip:server0@[local_ip]:[local_port];transport=[transport]>
+      Content-Length: 0
+
+    ]]>
+  </send>
 
 
   <!-- server0 sends request to trigger handover -->
@@ -127,7 +199,7 @@
   <!-- server0 starts RTP media -->
   <nop>
     <action>
-      <exec play_pcap_audio="reinvite-uas/xml/g711a.pcap"/>
+      <exec play_pcap_audio="options-uas/xml/g711a.pcap"/>
     </action>
   </nop>
 

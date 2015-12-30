@@ -3,9 +3,9 @@ SCRIPT=run_test.py
 CLIENT-SCRIPT=run_test_client.py
 SERVER-SCRIPT=run_test_server.py
 ARGS=1 1 1000
-TESTS=reinvite-uac reinvite-uas reinvite-3pcc reinvite-proactive-3pcc reinvite-proactive-extension-3pcc refer-3pcc join-3pcc
-CLIENT-TESTS=client-reinvite-uac client-reinvite-uas client-reinvite-3pcc client-reinvite-proactive-3pcc client-reinvite-proactive-extension-3pcc client-refer-3pcc client-join-3pcc
-SERVER-TESTS=server-reinvite-uac server-reinvite-uas server-reinvite-3pcc server-reinvite-proactive-3pcc server-reinvite-proactive-extension-3pcc server-refer-3pcc server-join-3pcc
+TESTS=reinvite-uac reinvite-uas options-uas reinvite-3pcc reinvite-proactive-3pcc reinvite-proactive-extension-3pcc refer-3pcc join-3pcc
+CLIENT-TESTS=client-reinvite-uac client-reinvite-uas client-options-uas client-reinvite-3pcc client-reinvite-proactive-3pcc client-reinvite-proactive-extension-3pcc client-refer-3pcc client-join-3pcc
+SERVER-TESTS=server-reinvite-uac server-reinvite-uas server-options-uas server-reinvite-3pcc server-reinvite-proactive-3pcc server-reinvite-proactive-extension-3pcc server-refer-3pcc server-join-3pcc
 
 .PHONY: $(TESTS) all clean
 
@@ -17,6 +17,9 @@ REINVITE-UAC-DIR-TITLE="reINVITE scenario - UAC trigger"
 
 REINVITE-UAS-DIR=reinvite-uas
 REINVITE-UAS-DIR-TITLE="reINVITE scenario - UAS trigger"
+
+OPTIONS-UAS-DIR=options-uas
+OPTIONS-UAS-DIR-TITLE="OPTIONS geolocation scenario"
 
 REINVITE-3PCC-DIR=reinvite-3pcc
 REINVITE-3PCC-TITLE="3pcc reINVITE scenario"
@@ -41,6 +44,9 @@ reinvite-uac:
 
 reinvite-uas:
 	$(RUN) $(SCRIPT) $(REINVITE-UAS-DIR) $(REINVITE-UAS-DIR-TITLE) $(ARGS)
+
+options-uas:
+	$(RUN) $(SCRIPT) $(OPTIONS-UAS-DIR) $(OPTIONS-UAS-DIR-TITLE) $(ARGS)
 
 reinvite-3pcc:
 	$(RUN) $(SCRIPT) $(REINVITE-3PCC-DIR) $(REINVITE-3PCC-TITLE) $(ARGS)
@@ -67,6 +73,9 @@ client-reinvite-uac:
 client-reinvite-uas:
 	$(RUN) $(CLIENT-SCRIPT) $(REINVITE-UAS-DIR) $(REINVITE-UAS-DIR-TITLE) $(ARGS)
 
+client-options-uas:
+	$(RUN) $(CLIENT-SCRIPT) $(OPTIONS-UAS-DIR) $(OPTIONS-UAS-DIR-TITLE) $(ARGS)
+
 client-reinvite-3pcc:
 	$(RUN) $(CLIENT-SCRIPT) $(REINVITE-3PCC-DIR) $(REINVITE-3PCC-TITLE) $(ARGS)
 
@@ -92,6 +101,9 @@ server-reinvite-uac:
 server-reinvite-uas:
 	$(RUN) $(SERVER-SCRIPT) $(REINVITE-UAS-DIR) $(REINVITE-UAS-DIR-TITLE) $(ARGS)
 
+server-options-uas:
+	$(RUN) $(SERVER-SCRIPT) $(OPTIONS-UAS-DIR) $(OPTIONS-UAS-DIR-TITLE) $(ARGS)
+
 server-reinvite-3pcc:
 	$(RUN) $(SERVER-SCRIPT) $(REINVITE-3PCC-DIR) $(REINVITE-3PCC-TITLE) $(ARGS)
 
@@ -112,6 +124,8 @@ clean:
 	-@cd $(REINVITE-UAC-DIR); echo "cleaning" `pwd`; rm -rf *.pcap *.png *.out $(ORDER); cd ..
 	
 	-@cd $(REINVITE-UAS-DIR); echo "cleaning" `pwd`; rm -rf *.pcap *.png *.out $(ORDER); cd ..
+	
+	-@cd $(OPTIONS-UAS-DIR); echo "cleaning" `pwd`; rm -rf *.pcap *.png *.out $(ORDER); cd ..
 	
 	-@cd $(REINVITE-3PCC-DIR); echo "cleaning" `pwd`; rm -rf *.pcap *.png *.out $(ORDER); cd ..
 	
