@@ -2,11 +2,8 @@
 
 
 '''
-    UAS SERVER
+	UAS SERVER
 '''
-SERVER_IF_0	=	"eth1"
-SERVER_IF_1	=	"eth1"
-
 SERVER_IP_0	=	"192.168.0.16"
 SERVER_IP_1	=	"192.168.0.16"
 
@@ -25,11 +22,8 @@ SERVER_BASE_DIR	=	"xml/"
 
 
 '''
-    UAC CLIENTs
+	UAC CLIENTs
 '''
-CLIENT_IF_0	=	"wlan0"
-CLIENT_IF_1	=	"wlan1"
-
 CLIENT_IP_0	=	"192.168.0.11"
 CLIENT_IP_1	=	"192.168.0.14"
 
@@ -48,9 +42,6 @@ CLIENT_BASE_DIR	=	"xml/"
 
 
 '''
-    others
+	others
 '''
-TWIN_PORT	=	"9999"
-UAC_MSG_NR	=	100       # total calls
-UAC_MSG_RATE	=	10        # calls per
-UAC_MSG_RATEP	=	1000      # milisecond
+TWIN_PORT	=	"9999"	# 3pcc twin port

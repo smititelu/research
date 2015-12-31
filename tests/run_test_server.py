@@ -26,19 +26,6 @@ if not any(test_name in item for item in test_list):
 	exit()
 
 ################################### globals ####################################
-# if
-sip_server0_if = defs.SERVER_IF_0
-sip_server1_if = defs.SERVER_IF_1
-
-rtp_server0_if = defs.SERVER_IF_0
-rtp_server1_if = defs.SERVER_IF_1
-
-sip_client0_if = defs.CLIENT_IF_0
-sip_client1_if = defs.CLIENT_IF_1
-
-rtp_client0_if = defs.CLIENT_IF_0
-rtp_client1_if = defs.CLIENT_IF_1
-
 # ip
 sip_server0_ip = defs.SERVER_IP_0
 sip_server1_ip = defs.SERVER_IP_1
@@ -103,40 +90,46 @@ print "TWIN port: " + sip_twin_port
 ################################## test run ###################################
 if re.search('3pcc', test_name):
 	# start uas 1 - 3pcc B side
-	p = helps.sipp_3pcc_uas_start(
+	p = helps.start_sipp_uas_3pcc (
 		sip_server1_file,
 		sip_client1_ip, sip_client1_port,
 		sip_server1_ip, sip_server1_port,
 		rtp_server1_ip, rtp_server1_port,
 		sip_server0_ip, sip_twin_port,
 		sip_client1_user,
-		str(msg_nr), str(rate_nr), str(ratep_nr))
+		str(msg_nr), str(rate_nr), str(ratep_nr)
+	)
+
 	p.wait()
 
 	# start uas 0 - 3pcc A side
-	p = helps.sipp_3pcc_uas_start(
+	p = helps.start_sipp_uas_3pcc (
 		sip_server0_file,
 		sip_client0_ip, sip_client0_port,
 		sip_server0_ip, sip_server0_port,
 		rtp_server0_ip, rtp_server0_port,
 		sip_server1_ip, sip_twin_port,
 		sip_client0_user,
-		str(msg_nr), str(rate_nr), str(ratep_nr))
+		str(msg_nr), str(rate_nr), str(ratep_nr)
+	)
+
 	p.wait()
 
 
 else:
 	# start uas 0
-	p = helps.sipp_uas_start(
+	p = helps.start_sipp_uas (
 		sip_server0_file,
 		sip_client0_ip, sip_client0_port,
 		sip_server0_ip, sip_server0_port,
 		rtp_server0_ip, rtp_server0_port,
 		sip_client0_user,
-		str(msg_nr), str(rate_nr), str(ratep_nr))
+		str(msg_nr), str(rate_nr), str(ratep_nr)
+	)
+
 	p.wait()
 
 
 # wait for sipp scenario to stop
-while helps.process_is_running("sipp"):
+while helps.is_process_running("sipp"):
 	1;
