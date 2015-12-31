@@ -7,7 +7,7 @@ modules_dirs:=modules
 cfg_group_include=
 
 # the list of extra modules to compile
-include_modules= db_mysql xmlops
+include_modules= app_python db_mysql xmlops
 
 # the list of static modules
 static_modules= 
