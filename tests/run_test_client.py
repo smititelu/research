@@ -6,7 +6,7 @@ import time
 import re
 
 #################################### tests #####################################
-test_list = ['refer-3pcc', 'reinvite-3pcc', 'reinvite-proactive-3pcc', 'reinvite-proactive-extension-3pcc', 'join-3pcc', 'reinvite-uac', 'reinvite-uas', 'options-uas']
+test_list = ['refer-3pcc', 'reinvite-3pcc', 'reinvite-proactive-3pcc', 'reinvite-proactive-extension-3pcc', 'join-3pcc', 'reinvite-uac', 'reinvite-uas', 'options-uas', 'kamailio-geolocation-1']
 
 ################################### checks ####################################
 if len(sys.argv) > 5:
@@ -38,6 +38,8 @@ sip_client1_ip = defs.CLIENT_IP_1
 rtp_client0_ip = defs.CLIENT_IP_0
 rtp_client1_ip = defs.CLIENT_IP_1
 
+kamailio_server_ip = defs.KAMAILIO_SERVER_IP
+
 # port
 sip_server0_port = defs.SERVER_PORT_00
 rtp_server0_port = defs.SERVER_PORT_01
@@ -53,6 +55,8 @@ rtp_client1_port = defs.CLIENT_PORT_11
 
 sip_twin_port = defs.TWIN_PORT
 
+kamailio_server_port = defs.KAMAILIO_SERVER_PORT
+
 # users
 sip_server0_user = defs.SERVER_USER_0
 sip_server1_user = defs.SERVER_USER_1
@@ -66,6 +70,18 @@ sip_server1_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_FILE_1
 
 sip_client0_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_FILE_0
 sip_client1_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_FILE_1
+
+sip_server0_register_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_REGISTER_FILE_0
+sip_server1_register_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_REGISTER_FILE_1
+
+sip_client0_register_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_REGISTER_FILE_0
+sip_client1_register_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_REGISTER_FILE_1
+
+sip_server0_unregister_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_UNREGISTER_FILE_0
+sip_server1_unregister_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_UNREGISTER_FILE_1
+
+sip_client0_unregister_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_UNREGISTER_FILE_0
+sip_client1_unregister_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_UNREGISTER_FILE_1
 
 # other files
 order= test_name + "/order"
@@ -116,6 +132,59 @@ if re.search('3pcc', test_name):
 	p.wait()
 
 
+elif re.search('kamailio', test_name):
+	# start tcpdump capture
+	helps.start_tcpdump(test_name + "/" + test_name + ".pcap")
+
+	# start uac 0 register
+	p = helps.start_sipp_uac (
+		sip_client0_register_file,
+		sip_client0_ip, sip_client0_port,
+		rtp_client0_ip, rtp_client0_port,
+		kamailio_server_ip, kamailio_server_port,
+		sip_server0_user,
+		str(msg_nr), str(rate_nr), str(ratep_nr)
+	)
+
+	p.wait()
+
+        # wait for sipp scenario to stop
+        while helps.is_process_running("sipp_uac"):
+                1;
+
+	# start uac 0
+	p = helps.start_sipp_uac (
+		sip_client0_file,
+		sip_client0_ip, sip_client0_port,
+		rtp_client0_ip, rtp_client0_port,
+		kamailio_server_ip, kamailio_server_port,
+		sip_server0_user,
+		str(msg_nr), str(rate_nr), str(ratep_nr)
+	)
+
+	p.wait()
+
+        # wait for sipp scenario to stop
+        while helps.is_process_running("sipp_uac"):
+                1;
+
+	# start uac 0 unregister
+	p = helps.start_sipp_uac (
+		sip_client0_unregister_file,
+		sip_client0_ip, sip_client0_port,
+		rtp_client0_ip, rtp_client0_port,
+		kamailio_server_ip, kamailio_server_port,
+		sip_server0_user,
+		str(msg_nr), str(rate_nr), str(ratep_nr)
+	)
+
+	p.wait()
+
+        # wait for sipp scenario to stop
+        while helps.is_process_running("sipp_uac"):
+                1;
+
+
 else:
 	# start tcpdump capture
 	helps.start_tcpdump(test_name + "/" + test_name + ".pcap")
@@ -134,7 +203,7 @@ else:
 
 
 # wait for sipp scenario to stop
-while helps.is_process_running("sipp"):
+while helps.is_process_running("sipp_uac"):
 	1;
 
 # stop tcpdump
@@ -145,6 +214,7 @@ if msg_nr == 1:
 	# create order file used for ca
 	fd=open(order, "w+")
 	print >> fd, sip_client0_ip + ":.* UAC wlan0"
+	print >> fd, kamailio_server_ip + ":.* Kamailio"
 	print >> fd, sip_server0_ip + ":.* UAS server0"
 	if sip_server0_ip != sip_server1_ip and sip_server1_ip != "":
 		print >> fd, sip_server1_ip + ":.* UAS server1"

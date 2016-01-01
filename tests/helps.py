@@ -17,7 +17,7 @@ def start_sipp_uac (
 	msg_nr="1", rate_nr="1", ratep_nr="1", T2="1"
 ):
 	return subprocess.Popen ([
-		"sipp",
+		"sipp_uac",
 		server_ip+":"+server_port,
 		"-sf", fname,
 		"-i", client_ip,
@@ -48,7 +48,7 @@ def start_sipp_uas (
 	msg_nr="1", rate_nr="1", ratep_nr="1", T2="1"
 ):
 	return subprocess.Popen ([
-		"sipp",
+		"sipp_uas",
 		client_ip + ":" + client_port,
 		"-sf", fname,
 		"-i", server_ip,
@@ -79,7 +79,7 @@ def start_sipp_uac_3pcc (
 	msg_nr="1", rate_nr="1", ratep_nr="1", T2="1"
 ):
 	return subprocess.Popen ([
-		"sipp",
+		"sipp_uac",
 		server_ip+":"+server_port,
 		"-sf", fname,
 		"-i", client_ip,
@@ -111,7 +111,7 @@ def start_sipp_uas_3pcc (
 	msg_nr="1", rate_nr="1", ratep_nr="1", T2="1"
 ):
 	return subprocess.Popen ([
-		"sipp",
+		"sipp_uas",
 		client_ip + ":" + client_port,
 		"-3pcc", twin_ip + ":" + twin_port,
 		"-sf", fname,
