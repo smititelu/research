@@ -5,6 +5,7 @@ import os
 import time
 import re
 
+
 #################################### tests #####################################
 test_list = ['refer-3pcc', 'reinvite-3pcc', 'reinvite-proactive-3pcc', 'reinvite-proactive-extension-3pcc', 'join-3pcc', 'reinvite-uac', 'reinvite-uas', 'options-uas', 'kamailio-geolocation-1', 'kamailio-geolocation-2']
 
@@ -26,62 +27,62 @@ if not any(test_name in item for item in test_list):
 
 ################################### globals ####################################
 # ip
-sip_server0_ip = defs.SERVER_IP_0
-sip_server1_ip = defs.SERVER_IP_1
+sip_uas_server0_ip = defs.UAS_SERVER_IP_0
+sip_uas_server1_ip = defs.UAS_SERVER_IP_1
 
-rtp_server0_ip = defs.SERVER_IP_0
-rtp_server1_ip = defs.SERVER_IP_1
+rtp_uas_server0_ip = defs.UAS_SERVER_IP_0
+rtp_uas_server1_ip = defs.UAS_SERVER_IP_1
 
-sip_client0_ip = defs.CLIENT_IP_0
-sip_client1_ip = defs.CLIENT_IP_1
+sip_uac_client0_ip = defs.UAC_CLIENT_IP_0
+sip_uac_client1_ip = defs.UAC_CLIENT_IP_1
 
-rtp_client0_ip = defs.CLIENT_IP_0
-rtp_client1_ip = defs.CLIENT_IP_1
+rtp_uac_client0_ip = defs.UAC_CLIENT_IP_0
+rtp_uac_client1_ip = defs.UAC_CLIENT_IP_1
 
-kamailio_server_ip = defs.KAMAILIO_SERVER_IP
+sip_kamailio_server_ip = defs.KAMAILIO_SERVER_IP
 
 # port
-sip_server0_port = defs.SERVER_PORT_00
-rtp_server0_port = defs.SERVER_PORT_01
+sip_uas_server0_port = defs.UAS_SERVER_PORT_00
+rtp_uas_server0_port = defs.UAS_SERVER_PORT_01
 
-sip_server1_port = defs.SERVER_PORT_10
-rtp_server1_port = defs.SERVER_PORT_11
+sip_uas_server1_port = defs.UAS_SERVER_PORT_10
+rtp_uas_server1_port = defs.UAS_SERVER_PORT_11
 
-sip_client0_port = defs.CLIENT_PORT_00
-rtp_client0_port = defs.CLIENT_PORT_01
+sip_uac_client0_port = defs.UAC_CLIENT_PORT_00
+rtp_uac_client0_port = defs.UAC_CLIENT_PORT_01
 
-sip_client1_port = defs.CLIENT_PORT_10
-rtp_client1_port = defs.CLIENT_PORT_11
+sip_uac_client1_port = defs.UAC_CLIENT_PORT_10
+rtp_uac_client1_port = defs.UAC_CLIENT_PORT_11
 
 sip_twin_port = defs.TWIN_PORT
 
-kamailio_server_port = defs.KAMAILIO_SERVER_PORT
+sip_kamailio_server_port = defs.KAMAILIO_SERVER_PORT
 
 # users
-sip_server0_user = defs.SERVER_USER_0
-sip_server1_user = defs.SERVER_USER_1
+sip_uas_server0_user = defs.UAS_SERVER_USER_0
+sip_uas_server1_user = defs.UAS_SERVER_USER_1
 
-sip_client0_user = defs.CLIENT_USER_0
-sip_client1_user = defs.CLIENT_USER_1
+sip_uac_client0_user = defs.UAC_CLIENT_USER_0
+sip_uac_client1_user = defs.UAC_CLIENT_USER_1
 
 # xml files
-sip_server0_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_FILE_0
-sip_server1_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_FILE_1
+sipp_uas_server0_file = test_name + "/" + defs.UAS_SERVER_BASE_DIR + defs.UAS_SERVER_FILE_0
+sipp_uas_server1_file = test_name + "/" + defs.UAS_SERVER_BASE_DIR + defs.UAS_SERVER_FILE_1
 
-sip_client0_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_FILE_0
-sip_client1_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_FILE_1
+sipp_uac_client0_file = test_name + "/" + defs.UAC_CLIENT_BASE_DIR + defs.UAC_CLIENT_FILE_0
+sipp_uac_client1_file = test_name + "/" + defs.UAC_CLIENT_BASE_DIR + defs.UAC_CLIENT_FILE_1
 
-sip_server0_register_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_REGISTER_FILE_0
-sip_server1_register_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_REGISTER_FILE_1
+sipp_uas_server0_register_file = test_name + "/" + defs.UAS_SERVER_BASE_DIR + defs.UAS_SERVER_REGISTER_FILE_0
+sipp_uas_server1_register_file = test_name + "/" + defs.UAS_SERVER_BASE_DIR + defs.UAS_SERVER_REGISTER_FILE_1
 
-sip_client0_register_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_REGISTER_FILE_0
-sip_client1_register_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_REGISTER_FILE_1
+sipp_uac_client0_register_file = test_name + "/" + defs.UAC_CLIENT_BASE_DIR + defs.UAC_CLIENT_REGISTER_FILE_0
+sipp_uac_client1_register_file = test_name + "/" + defs.UAC_CLIENT_BASE_DIR + defs.UAC_CLIENT_REGISTER_FILE_1
 
-sip_server0_unregister_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_UNREGISTER_FILE_0
-sip_server1_unregister_file = test_name + "/" + defs.SERVER_BASE_DIR + defs.SERVER_UNREGISTER_FILE_1
+sipp_uas_server0_unregister_file = test_name + "/" + defs.UAS_SERVER_BASE_DIR + defs.UAS_SERVER_UNREGISTER_FILE_0
+sipp_uas_server1_unregister_file = test_name + "/" + defs.UAS_SERVER_BASE_DIR + defs.UAS_SERVER_UNREGISTER_FILE_1
 
-sip_client0_unregister_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_UNREGISTER_FILE_0
-sip_client1_unregister_file = test_name + "/" + defs.CLIENT_BASE_DIR + defs.CLIENT_UNREGISTER_FILE_1
+sipp_uac_client0_unregister_file = test_name + "/" + defs.UAC_CLIENT_BASE_DIR + defs.UAC_CLIENT_UNREGISTER_FILE_0
+sipp_uac_client1_unregister_file = test_name + "/" + defs.UAC_CLIENT_BASE_DIR + defs.UAC_CLIENT_UNREGISTER_FILE_1
 
 # other files
 order= test_name + "/order"
@@ -95,10 +96,10 @@ except OSError:
 	pass
 
 '''
-print "SERVER0 USER: " + sip_server0_user + " " + sip_server0_file + " " + sip_server0_ip + ":" + sip_server0_port + " " + rtp_server0_ip + ":" + rtp_server0_port
-print "SERVER1 USER: " + sip_server1_user + " " + sip_server1_file + " " + sip_server1_ip + ":" + sip_server1_port + " " + rtp_server1_ip + ":" + rtp_server1_port
-print "CLIENT0 USER: " + sip_client0_user + " " + sip_client0_file + " " + sip_client0_ip + ":" + sip_client0_port + " " + rtp_client0_ip + ":" + rtp_client0_port
-print "CLIENT1 USER: " + sip_client1_user + " " + sip_client1_file + " " + sip_client1_ip + ":" + sip_client1_port + " " + rtp_client1_ip + ":" + rtp_client1_port
+print "SERVER0 USER: " + sip_uas_server0_user + " " + sipp_uas_server0_file + " " + sip_uas_server0_ip + ":" + sip_uas_server0_port + " " + rtp_uas_server0_ip + ":" + rtp_uas_server0_port
+print "SERVER1 USER: " + sip_uas_server1_user + " " + sipp_uas_server1_file + " " + sip_uas_server1_ip + ":" + sip_uas_server1_port + " " + rtp_uas_server1_ip + ":" + rtp_uas_server1_port
+print "CLIENT0 USER: " + sip_uac_client0_user + " " + sipp_uac_client0_file + " " + sip_uac_client0_ip + ":" + sip_uac_client0_port + " " + rtp_uac_client0_ip + ":" + rtp_uac_client0_port
+print "CLIENT1 USER: " + sip_uac_client1_user + " " + sipp_uac_client1_file + " " + sip_uac_client1_ip + ":" + sip_uac_client1_port + " " + rtp_uac_client1_ip + ":" + rtp_uac_client1_port
 print "TWIN port: " + sip_twin_port
 '''
 
@@ -109,11 +110,11 @@ if re.search('3pcc', test_name):
 
 	# start uac 1
 	p = helps.start_sipp_uac_3pcc (
-		sip_client1_file,
-		sip_client1_ip, sip_client1_port,
-		rtp_client1_ip, rtp_client1_port,
-		sip_server1_ip, sip_server1_port,
-		sip_server1_user,
+		sipp_uac_client1_file,
+		sip_uac_client1_ip, sip_uac_client1_port,
+		rtp_uac_client1_ip, rtp_uac_client1_port,
+		sip_uas_server1_ip, sip_uas_server1_port,
+		sip_uas_server1_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -121,11 +122,11 @@ if re.search('3pcc', test_name):
 
 	# start uac 0
 	p = helps.start_sipp_uac_3pcc (
-		sip_client0_file,
-		sip_client0_ip, sip_client0_port,
-		rtp_client0_ip, rtp_client0_port,
-		sip_server0_ip, sip_server0_port,
-		sip_server0_user,
+		sipp_uac_client0_file,
+		sip_uac_client0_ip, sip_uac_client0_port,
+		rtp_uac_client0_ip, rtp_uac_client0_port,
+		sip_uas_server0_ip, sip_uas_server0_port,
+		sip_uas_server0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -143,11 +144,11 @@ elif re.search('kamailio-geolocation-1', test_name):
 	############################## REGISTER ###############################
 	# start uac 0 register
 	p = helps.start_sipp_uac (
-		sip_client0_register_file,
-		sip_client0_ip, sip_client0_port,
-		rtp_client0_ip, rtp_client0_port,
-		kamailio_server_ip, kamailio_server_port,
-		sip_client0_user,
+		sipp_uac_client0_register_file,
+		sip_uac_client0_ip, sip_uac_client0_port,
+		rtp_uac_client0_ip, rtp_uac_client0_port,
+		sip_kamailio_server_ip, sip_kamailio_server_port,
+		sip_uac_client0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -163,11 +164,11 @@ elif re.search('kamailio-geolocation-1', test_name):
 
 	# start uac 0
 	p = helps.start_sipp_uac (
-		sip_client0_file,
-		sip_client0_ip, sip_client0_port,
-		rtp_client0_ip, rtp_client0_port,
-		kamailio_server_ip, kamailio_server_port,
-		sip_server0_user,
+		sipp_uac_client0_file,
+		sip_uac_client0_ip, sip_uac_client0_port,
+		rtp_uac_client0_ip, rtp_uac_client0_port,
+		sip_kamailio_server_ip, sip_kamailio_server_port,
+		sip_uas_server0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -183,11 +184,11 @@ elif re.search('kamailio-geolocation-1', test_name):
 	############################# unREGISTER ##############################
 	# start uac 0 unregister
 	p = helps.start_sipp_uac (
-		sip_client0_unregister_file,
-		sip_client0_ip, sip_client0_port,
-		rtp_client0_ip, rtp_client0_port,
-		kamailio_server_ip, kamailio_server_port,
-		sip_client0_user,
+		sipp_uac_client0_unregister_file,
+		sip_uac_client0_ip, sip_uac_client0_port,
+		rtp_uac_client0_ip, rtp_uac_client0_port,
+		sip_kamailio_server_ip, sip_kamailio_server_port,
+		sip_uac_client0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -202,11 +203,11 @@ elif re.search('kamailio-geolocation-2', test_name):
 	############################## REGISTER ###############################
 	# start uac 0 register wlan0
 	p = helps.start_sipp_uac (
-		sip_client0_register_file,
-		sip_client0_ip, sip_client0_port,
-		rtp_client0_ip, rtp_client0_port,
-		kamailio_server_ip, kamailio_server_port,
-		sip_client0_user,
+		sipp_uac_client0_register_file,
+		sip_uac_client0_ip, sip_uac_client0_port,
+		rtp_uac_client0_ip, rtp_uac_client0_port,
+		sip_kamailio_server_ip, sip_kamailio_server_port,
+		sip_uac_client0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -214,11 +215,11 @@ elif re.search('kamailio-geolocation-2', test_name):
 
 	# start uac 0 register wlan1
 	p = helps.start_sipp_uac (
-		sip_client0_register_file,
-		sip_client1_ip, sip_client1_port,
-		rtp_client1_ip, rtp_client1_port,
-		kamailio_server_ip, kamailio_server_port,
-		sip_client0_user,
+		sipp_uac_client0_register_file,
+		sip_uac_client1_ip, sip_uac_client1_port,
+		rtp_uac_client1_ip, rtp_uac_client1_port,
+		sip_kamailio_server_ip, sip_kamailio_server_port,
+		sip_uac_client0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -234,11 +235,11 @@ elif re.search('kamailio-geolocation-2', test_name):
 
 	# start uac 0
 	p = helps.start_sipp_uac (
-		sip_client0_file,
-		sip_client0_ip, sip_client0_port,
-		rtp_client0_ip, rtp_client0_port,
-		kamailio_server_ip, kamailio_server_port,
-		sip_server0_user,
+		sipp_uac_client0_file,
+		sip_uac_client0_ip, sip_uac_client0_port,
+		rtp_uac_client0_ip, rtp_uac_client0_port,
+		sip_kamailio_server_ip, sip_kamailio_server_port,
+		sip_uas_server0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -246,11 +247,11 @@ elif re.search('kamailio-geolocation-2', test_name):
 
 	# start uac 1
 	p = helps.start_sipp_uac (
-		sip_client1_file,
-		sip_client1_ip, sip_client1_port,
-		rtp_client1_ip, rtp_client1_port,
-		kamailio_server_ip, kamailio_server_port,
-		sip_server0_user,
+		sipp_uac_client1_file,
+		sip_uac_client1_ip, sip_uac_client1_port,
+		rtp_uac_client1_ip, rtp_uac_client1_port,
+		sip_kamailio_server_ip, sip_kamailio_server_port,
+		sip_uas_server0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -266,11 +267,11 @@ elif re.search('kamailio-geolocation-2', test_name):
 	############################# unREGISTER ##############################
 	# start uac0 unregister wlan0
 	p = helps.start_sipp_uac (
-		sip_client0_unregister_file,
-		sip_client0_ip, sip_client0_port,
-		rtp_client0_ip, rtp_client0_port,
-		kamailio_server_ip, kamailio_server_port,
-		sip_client0_user,
+		sipp_uac_client0_unregister_file,
+		sip_uac_client0_ip, sip_uac_client0_port,
+		rtp_uac_client0_ip, rtp_uac_client0_port,
+		sip_kamailio_server_ip, sip_kamailio_server_port,
+		sip_uac_client0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -278,11 +279,11 @@ elif re.search('kamailio-geolocation-2', test_name):
 
 	# start uac0 unregister wlan1
 	p = helps.start_sipp_uac (
-		sip_client0_unregister_file,
-		sip_client1_ip, sip_client1_port,
-		rtp_client1_ip, rtp_client1_port,
-		kamailio_server_ip, kamailio_server_port,
-		sip_client0_user,
+		sipp_uac_client0_unregister_file,
+		sip_uac_client1_ip, sip_uac_client1_port,
+		rtp_uac_client1_ip, rtp_uac_client1_port,
+		sip_kamailio_server_ip, sip_kamailio_server_port,
+		sip_uac_client0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -299,11 +300,11 @@ else:
 
 	# start uac 0
 	p = helps.start_sipp_uac (
-		sip_client0_file,
-		sip_client0_ip, sip_client0_port,
-		rtp_client0_ip, rtp_client0_port,
-		sip_server0_ip, sip_server0_port,
-		sip_server0_user,
+		sipp_uac_client0_file,
+		sip_uac_client0_ip, sip_uac_client0_port,
+		rtp_uac_client0_ip, rtp_uac_client0_port,
+		sip_uas_server0_ip, sip_uas_server0_port,
+		sip_uas_server0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -322,15 +323,15 @@ if msg_nr == 1:
 	# create order file used for ca
 	fd=open(order, "w+")
 
-	if sip_client1_ip != "":
-		print >> fd, sip_client1_ip + ":.* UAC 1"
-	print >> fd, sip_client0_ip + ":.* UAC 0"
+	if sip_uac_client1_ip != "":
+		print >> fd, sip_uac_client1_ip + ":.* UAC 1"
+	print >> fd, sip_uac_client0_ip + ":.* UAC 0"
 
-	print >> fd, kamailio_server_ip + ":.* Kamailio"
+	print >> fd, sip_kamailio_server_ip + ":.* Kamailio"
 
-	print >> fd, sip_server0_ip + ":.* UAS"
-	if sip_server0_ip != sip_server1_ip and sip_server1_ip != "":
-		print >> fd, sip_server1_ip + ":.* UAS"
+	print >> fd, sip_uas_server0_ip + ":.* UAS"
+	if sip_uas_server0_ip != sip_uas_server1_ip and sip_uas_server1_ip != "":
+		print >> fd, sip_uas_server1_ip + ":.* UAS"
 
 	fd.close()
 
