@@ -7,7 +7,7 @@ import re
 
 
 #################################### tests #####################################
-test_list = ['refer-3pcc', 'reinvite-3pcc', 'reinvite-proactive-3pcc', 'reinvite-proactive-extension-3pcc', 'join-3pcc', 'reinvite-uac', 'reinvite-uas', 'options-uas', 'kamailio-geolocation-1']
+test_list = ['refer-3pcc', 'reinvite-3pcc', 'reinvite-proactive-3pcc', 'reinvite-proactive-extension-3pcc', 'join-3pcc', 'reinvite-uac', 'reinvite-uas', 'options-uas', 'kamailio-geolocation-1', 'kamailio-geolocation-2']
 
 ################################### checks ####################################
 if len(sys.argv) > 5:
@@ -131,15 +131,20 @@ if re.search('3pcc', test_name):
 
 	p.wait()
 
+	# wait for sipp scenario to stop
+	while helps.is_process_running("sipp_uas"):
+		1;
 
-elif re.search('kamailio', test_name):
+
+elif re.search('kamailio-geolocation', test_name):
+        ############################## REGISTER ###############################
 	# start uas 0 register
 	p = helps.start_sipp_uas (
 		sip_server0_register_file,
                 kamailio_server_ip, kamailio_server_port,
 		sip_server0_ip, sip_server0_port,
 		rtp_server0_ip, rtp_server0_port,
-		sip_client0_user,
+		sip_server0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -149,6 +154,7 @@ elif re.search('kamailio', test_name):
 	while helps.is_process_running("sipp_uas"):
 		1;
 
+        ################################ TEST #################################
 	# start uas 0
 	p = helps.start_sipp_uas (
 		sip_server0_file,
@@ -165,13 +171,14 @@ elif re.search('kamailio', test_name):
 	while helps.is_process_running("sipp_uas"):
 		1;
 
+        ############################# unREGISTER ##############################
 	# start uas 0 unregister
 	p = helps.start_sipp_uas (
 		sip_server0_unregister_file,
                 kamailio_server_ip, kamailio_server_port,
 		sip_server0_ip, sip_server0_port,
 		rtp_server0_ip, rtp_server0_port,
-		sip_client0_user,
+		sip_server0_user,
 		str(msg_nr), str(rate_nr), str(ratep_nr)
 	)
 
@@ -195,7 +202,6 @@ else:
 
 	p.wait()
 
-
-# wait for sipp scenario to stop
-while helps.is_process_running("sipp_uas"):
-	1;
+	# wait for sipp scenario to stop
+	while helps.is_process_running("sipp_uas"):
+		1;

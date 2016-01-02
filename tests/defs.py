@@ -17,10 +17,10 @@ SERVER_USER_1	=	"server1"
 
 SERVER_FILE_0	=	"uas-0.xml"
 SERVER_FILE_1	=	"uas-1.xml"
-SERVER_REGISTER_FILE_0		=	"register-uas-0.xml"
-SERVER_REGISTER_FILE_1		=	"register-uas-1.xml"
-SERVER_UNREGISTER_FILE_0	=	"unregister-uas-0.xml"
-SERVER_UNREGISTER_FILE_1	=	"unregister-uas-1.xml"
+SERVER_REGISTER_FILE_0		=	"register.xml"
+SERVER_REGISTER_FILE_1		=	"register.xml"
+SERVER_UNREGISTER_FILE_0	=	"unregister.xml"
+SERVER_UNREGISTER_FILE_1	=	"unregister.xml"
 
 SERVER_BASE_DIR	=	"xml/"
 
@@ -41,10 +41,10 @@ CLIENT_USER_1	=	"client1"
 
 CLIENT_FILE_0	=	"uac-0.xml"
 CLIENT_FILE_1	=	"uac-1.xml"
-CLIENT_REGISTER_FILE_0		=	"register-uac-0.xml"
-CLIENT_REGISTER_FILE_1		=	"register-uac-1.xml"
-CLIENT_UNREGISTER_FILE_0	=	"unregister-uac-0.xml"
-CLIENT_UNREGISTER_FILE_1	=	"unregister-uac-1.xml"
+CLIENT_REGISTER_FILE_0		=	"register.xml"
+CLIENT_REGISTER_FILE_1		=	"register.xml"
+CLIENT_UNREGISTER_FILE_0	=	"unregister.xml"
+CLIENT_UNREGISTER_FILE_1	=	"unregister.xml"
 
 CLIENT_BASE_DIR	=	"xml/"
 

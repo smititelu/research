@@ -2,10 +2,10 @@ RUN=sudo python
 ARGS=1 1 1000
 
 SERVER-SCRIPT=run_test_server.py
-SERVER-TESTS=server-reinvite-uac server-reinvite-uas server-options-uas server-reinvite-3pcc server-reinvite-proactive-3pcc server-reinvite-proactive-extension-3pcc server-refer-3pcc server-join-3pcc server-kamailio-geolocation-1
+SERVER-TESTS=server-reinvite-uac server-reinvite-uas server-options-uas server-reinvite-3pcc server-reinvite-proactive-3pcc server-reinvite-proactive-extension-3pcc server-refer-3pcc server-join-3pcc server-kamailio-geolocation-1 server-kamailio-geolocation-2
 
 CLIENT-SCRIPT=run_test_client.py
-CLIENT-TESTS=client-reinvite-uac client-reinvite-uas client-options-uas client-reinvite-3pcc client-reinvite-proactive-3pcc client-reinvite-proactive-extension-3pcc client-refer-3pcc client-join-3pcc server-kamailio-geolocation-1
+CLIENT-TESTS=client-reinvite-uac client-reinvite-uas client-options-uas client-reinvite-3pcc client-reinvite-proactive-3pcc client-reinvite-proactive-extension-3pcc client-refer-3pcc client-join-3pcc server-kamailio-geolocation-1 server-kamailio-geolocation-2
 
 # Tests
 REINVITE-UAC-TEST=reinvite-uac
@@ -44,6 +44,10 @@ KAMAILIO-GEOLOCATION-1-TEST=kamailio-geolocation-1
 KAMAILIO-GEOLOCATION-1-TITLE="Kamailio geolocation test, UAC one interface"
 KAMAILIO-GEOLOCATION-1-TEST-FILES=$(filter-out $(wildcard $(KAMAILIO-GEOLOCATION-1-TEST)\/xml), $(wildcard $(KAMAILIO-GEOLOCATION-1-TEST)\/*))
 
+KAMAILIO-GEOLOCATION-2-TEST=kamailio-geolocation-2
+KAMAILIO-GEOLOCATION-2-TITLE="Kamailio geolocation test, UAC two interfaces"
+KAMAILIO-GEOLOCATION-2-TEST-FILES=$(filter-out $(wildcard $(KAMAILIO-GEOLOCATION-2-TEST)\/xml), $(wildcard $(KAMAILIO-GEOLOCATION-2-TEST)\/*))
+
 
 .PHONY: $(CLIENT-TESTS) $(SERVER-TESTS) all clean
 
@@ -78,6 +82,9 @@ client-join-3pcc:
 client-kamailio-geolocation-1:
 	$(RUN) $(CLIENT-SCRIPT) $(KAMAILIO-GEOLOCATION-1-TEST) $(KAMAILIO-GEOLOCATION-1-TITLE) $(ARGS)
 
+client-kamailio-geolocation-2:
+	$(RUN) $(CLIENT-SCRIPT) $(KAMAILIO-GEOLOCATION-2-TEST) $(KAMAILIO-GEOLOCATION-2-TITLE) $(ARGS)
+
 
 # server machine
 server-all: $(SERVER-TESTS)
@@ -109,6 +116,9 @@ server-join-3pcc:
 server-kamailio-geolocation-1:
 	$(RUN) $(SERVER-SCRIPT) $(KAMAILIO-GEOLOCATION-1-TEST) $(KAMAILIO-GEOLOCATION-1-TITLE) $(ARGS)
 
+server-kamailio-geolocation-2:
+	$(RUN) $(SERVER-SCRIPT) $(KAMAILIO-GEOLOCATION-2-TEST) $(KAMAILIO-GEOLOCATION-2-TITLE) $(ARGS)
+
 
 # clean
 clean:
@@ -121,3 +131,4 @@ clean:
 	-@echo "cleaning" $(REFER-3PCC-TEST)/; rm -rf $(REFER-3PCC-TEST-FILES)
 	-@echo "cleaning" $(JOIN-3PCC-TEST)/; rm -rf $(JOIN-3PCC-TEST-FILES)
 	-@echo "cleaning" $(KAMAILIO-GEOLOCATION-1-TEST)/; rm -rf $(KAMAILIO-GEOLOCATION-1-TEST-FILES)
+	-@echo "cleaning" $(KAMAILIO-GEOLOCATION-2-TEST)/; rm -rf $(KAMAILIO-GEOLOCATION-2-TEST-FILES)
