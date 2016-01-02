@@ -3,9 +3,11 @@ ARGS=1 1 1000
 
 SERVER-SCRIPT=run_test_server.py
 SERVER-TESTS=server-reinvite-uac server-reinvite-uas server-options-uas server-reinvite-3pcc server-reinvite-proactive-3pcc server-reinvite-proactive-extension-3pcc server-refer-3pcc server-join-3pcc server-kamailio-geolocation-1 server-kamailio-geolocation-2
+SERVER-KAMAILIO-TESTS=server-kamailio-geolocation-1 server-kamailio-geolocation-2
 
 CLIENT-SCRIPT=run_test_client.py
-CLIENT-TESTS=client-reinvite-uac client-reinvite-uas client-options-uas client-reinvite-3pcc client-reinvite-proactive-3pcc client-reinvite-proactive-extension-3pcc client-refer-3pcc client-join-3pcc server-kamailio-geolocation-1 server-kamailio-geolocation-2
+CLIENT-TESTS=client-reinvite-uac client-reinvite-uas client-options-uas client-reinvite-3pcc client-reinvite-proactive-3pcc client-reinvite-proactive-extension-3pcc client-refer-3pcc client-join-3pcc client-kamailio-geolocation-1 client-kamailio-geolocation-2
+CLIENT-KAMAILIO-TESTS=client-kamailio-geolocation-1 client-kamailio-geolocation-2
 
 # Tests
 REINVITE-UAC-TEST=reinvite-uac
@@ -54,6 +56,7 @@ KAMAILIO-GEOLOCATION-2-TEST-FILES=$(filter-out $(wildcard $(KAMAILIO-GEOLOCATION
 
 # client machine
 client-all: $(CLIENT-TESTS)
+client-kamailio-all: $(CLIENT-KAMAILIO-TESTS)
 
 client-reinvite-uac:
 	$(RUN) $(CLIENT-SCRIPT) $(REINVITE-UAC-TEST) $(REINVITE-UAC-TEST-TITLE) $(ARGS)
@@ -88,6 +91,7 @@ client-kamailio-geolocation-2:
 
 # server machine
 server-all: $(SERVER-TESTS)
+server-kamailio-all: $(SERVER-KAMAILIO-TESTS)
 
 server-reinvite-uac:
 	$(RUN) $(SERVER-SCRIPT) $(REINVITE-UAC-TEST) $(REINVITE-UAC-TEST-TITLE) $(ARGS)

@@ -323,14 +323,14 @@ if msg_nr == 1:
 	fd=open(order, "w+")
 
 	if sip_client1_ip != "":
-		print >> fd, sip_client1_ip + ":.* UAC wlan1"
-	print >> fd, sip_client0_ip + ":.* UAC wlan0"
+		print >> fd, sip_client1_ip + ":.* UAC 1"
+	print >> fd, sip_client0_ip + ":.* UAC 0"
 
 	print >> fd, kamailio_server_ip + ":.* Kamailio"
 
-	print >> fd, sip_server0_ip + ":.* UAS server0"
+	print >> fd, sip_server0_ip + ":.* UAS"
 	if sip_server0_ip != sip_server1_ip and sip_server1_ip != "":
-		print >> fd, sip_server1_ip + ":.* UAS server1"
+		print >> fd, sip_server1_ip + ":.* UAS"
 
 	fd.close()
 

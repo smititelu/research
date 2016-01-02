@@ -43,7 +43,7 @@
   <!-- server0 starts RTP media -->
   <nop>
     <action>
-      <exec play_pcap_audio="options-uas/xml/g711a.pcap"/>
+      <exec play_pcap_audio="kamailio-geolocation-1/xml/g711a.pcap"/>
     </action>
   </nop>
 
@@ -166,7 +166,7 @@
   <!-- server0 starts RTP media -->
   <nop>
     <action>
-      <exec play_pcap_audio="options-uas/xml/g711a.pcap"/>
+      <exec play_pcap_audio="kamailio-geolocation-1/xml/g711a.pcap"/>
     </action>
   </nop>
 
