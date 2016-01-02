@@ -41,11 +41,11 @@ JOIN-3PCC-TITLE="3pcc JOIN scenario"
 JOIN-3PCC-TEST-FILES=$(filter-out $(wildcard $(JOIN-3PCC-TEST)\/xml), $(wildcard $(JOIN-3PCC-TEST)\/*))
 
 KAMAILIO-GEOLOCATION-1-TEST=kamailio-geolocation-1
-KAMAILIO-GEOLOCATION-1-TITLE="Kamailio geolocation test, UAC one interface"
+KAMAILIO-GEOLOCATION-1-TITLE="Kamailio Geolocation - one interface UAC"
 KAMAILIO-GEOLOCATION-1-TEST-FILES=$(filter-out $(wildcard $(KAMAILIO-GEOLOCATION-1-TEST)\/xml), $(wildcard $(KAMAILIO-GEOLOCATION-1-TEST)\/*))
 
 KAMAILIO-GEOLOCATION-2-TEST=kamailio-geolocation-2
-KAMAILIO-GEOLOCATION-2-TITLE="Kamailio geolocation test, UAC two interfaces"
+KAMAILIO-GEOLOCATION-2-TITLE="Kamailio Geolocation - two interfaces UAC"
 KAMAILIO-GEOLOCATION-2-TEST-FILES=$(filter-out $(wildcard $(KAMAILIO-GEOLOCATION-2-TEST)\/xml), $(wildcard $(KAMAILIO-GEOLOCATION-2-TEST)\/*))
 
 
