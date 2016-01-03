@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE scenario SYSTEM "sipp.dtd">
 
-<!--     client1           Kamailio     -->
+<!--     client0           Kamailio     -->
 <!--        |.................|         -->
 <!--        | <== SIP/RTP ==> |         -->
 <!--        |.................|         -->
 
 
-<scenario name="UAC client1 side">
+<scenario name="UAC client0 side">
 
   <!-- client0 user variables to measure handover time -->
   <User variables="start_sec,start_msec,stop_sec,stop_msec" />
