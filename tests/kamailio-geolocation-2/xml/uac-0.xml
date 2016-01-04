@@ -72,7 +72,7 @@
       [last_Call-ID:]
       CSeq: [cseq] ACK
       Contact: client0 <sip:client0@[local_ip]:[local_port]>
-      Route: [routes]
+      [routes]
       Max-Forwards: 70
       Subject: Performance Test
       Content-Length: 0
@@ -82,7 +82,7 @@
 
 
   <!-- client0 pause to simulate movement -->
-  <pause milliseconds=="1000" crlf="true"/>
+  <pause milliseconds=="3000" crlf="true"/>
 
 
   <!--  client0 sends OPTION with geolocation data -->
@@ -91,8 +91,8 @@
 
       OPTIONS sip:[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      From: client0 <sip:client0@[remote_ip]:[remote_port]>;tag=[call_number]
-      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      [last_From:]
+      [last_To:]
       [last_Call-ID:]
       CSeq: [cseq] OPTIONS
       Contact: client0 <sip:client0@[local_ip]:[local_port]>
@@ -133,8 +133,8 @@
 
       OPTIONS sip:[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      From: client0 <sip:client0@[remote_ip]:[remote_port]>;tag=[call_number]
-      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      [last_From:]
+      [last_To:]
       [last_Call-ID:]
       CSeq: [cseq] OPTIONS
       Contact: client0 <sip:client0@[local_ip]:[local_port]>
@@ -175,8 +175,8 @@
 
       OPTIONS sip:[remote_ip]:[remote_port] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
-      From: client0 <sip:client0@[remote_ip]:[remote_port]>;tag=[call_number]
-      To: [service] <sip:[service]@[remote_ip]:[remote_port]>
+      [last_From:]
+      [last_To:]
       [last_Call-ID:]
       CSeq: [cseq] OPTIONS
       Contact: client0 <sip:client0@[local_ip]:[local_port]>

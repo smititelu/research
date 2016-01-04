@@ -11,7 +11,7 @@
 <scenario name="UAS server0 side">
 
   <!-- server0 receives INVITE -->
-  <recv request="INVITE"> </recv>
+  <recv request="INVITE" rrs="true"> </recv>
 
   <send>
     <![CDATA[
@@ -62,8 +62,9 @@
       From: server0 <sip:server0@[remote_ip]:[remote_port]>;tag=[call_number]
       To: [service] <sip:[service]@[remote_ip]:[remote_port]>
       [last_Call-ID:]
-      CSeq: [cseq] OPTIONS
+      CSeq: [cseq+3] OPTIONS
       Contact: server0 <sip:server0@[local_ip]:[local_port]>
+      [routes]
       Max-Forwards: 70
       Subject: Performance Test
       Allow: INVITE,ACK,CANCEL,OPTIONS,BYE,REFER,SUBSCRIBE,NOTIFY,INFO
@@ -96,7 +97,7 @@
 
 
   <!-- server0 receives INVITE -->
-  <recv request="INVITE"> </recv>
+  <recv request="INVITE" rrs="true"> </recv>
 
   <send>
     <![CDATA[
