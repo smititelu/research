@@ -2,11 +2,11 @@ RUN=sudo python
 ARGS=1 1 1000
 
 SERVER-SCRIPT=run_test_server.py
-SERVER-TESTS=server-reinvite-uac server-reinvite-uas server-options-uas server-reinvite-3pcc server-reinvite-proactive-3pcc server-reinvite-proactive-extension-3pcc server-refer-3pcc server-join-3pcc server-kamailio-geolocation-1 server-kamailio-geolocation-2
+SERVER-TESTS=server-reinvite-uac server-reinvite-uas server-options-uas server-reinvite-3pcc server-reinvite-proactive-3pcc server-reinvite-proactive-extension-3pcc server-refer-3pcc server-join-3pcc
 SERVER-KAMAILIO-TESTS=server-kamailio-geolocation-1 server-kamailio-geolocation-2
 
 CLIENT-SCRIPT=run_test_client.py
-CLIENT-TESTS=client-reinvite-uac client-reinvite-uas client-options-uas client-reinvite-3pcc client-reinvite-proactive-3pcc client-reinvite-proactive-extension-3pcc client-refer-3pcc client-join-3pcc client-kamailio-geolocation-1 client-kamailio-geolocation-2
+CLIENT-TESTS=client-reinvite-uac client-reinvite-uas client-options-uas client-reinvite-3pcc client-reinvite-proactive-3pcc client-reinvite-proactive-extension-3pcc client-refer-3pcc client-join-3pcc
 CLIENT-KAMAILIO-TESTS=client-kamailio-geolocation-1 client-kamailio-geolocation-2
 
 # Tests

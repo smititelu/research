@@ -105,6 +105,8 @@ print "TWIN port: " + sip_twin_port
 
 ################################## test run ###################################
 if re.search('3pcc', test_name):
+	sip_kamailio_server_ip = ""
+
 	# start tcpdump capture
 	helps.start_tcpdump(test_name + "/" + test_name + ".pcap")
 
@@ -295,6 +297,9 @@ elif re.search('kamailio-geolocation-2', test_name):
 
 
 else:
+	sip_uac_client1_ip = ""
+	sip_kamailio_server_ip = ""
+
 	# start tcpdump capture
 	helps.start_tcpdump(test_name + "/" + test_name + ".pcap")
 
@@ -327,7 +332,8 @@ if msg_nr == 1:
 		print >> fd, sip_uac_client1_ip + ":.* UAC 1"
 	print >> fd, sip_uac_client0_ip + ":.* UAC 0"
 
-	print >> fd, sip_kamailio_server_ip + ":.* Kamailio"
+	if sip_kamailio_server_ip != "":
+		print >> fd, sip_kamailio_server_ip + ":.* Kamailio"
 
 	print >> fd, sip_uas_server0_ip + ":.* UAS"
 	if sip_uas_server0_ip != sip_uas_server1_ip and sip_uas_server1_ip != "":
