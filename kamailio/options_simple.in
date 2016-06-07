@@ -1,0 +1,24 @@
+OPTIONS sip:nobody@192.168.0.19 SIP/2.0
+From: sip:sipsak@192.168.0.19:39239;tag=19cdc165
+To: sip:nobody@192.168.0.19
+Call-ID: 432914789@127.0.1.1
+Geolocation: <cid:target123@192.168.0.11>
+Geolocation-Routing: yes
+Accept: application/pidf+xml
+CSeq: 1 INVITE
+Contact: sip:sipsak@192.168.0.19:39239
+Max-Forwards: 70
+User-Agent: sipsak 0.9.6
+Content-Length: 204
+Content-Type: multipart/mixed; boundary=boundary1
+
+--boundary1
+
+Content-Type: application/pidf+xml
+<?xml version="1.0" encoding="UTF-8"?>
+<pos:position xmlns:pos="pos-namespace">
+<pos:x>32</pos:x>
+<pos:y>-97</pos:y>
+</pos:position>
+
+--boundary1
