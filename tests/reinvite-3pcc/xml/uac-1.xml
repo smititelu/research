@@ -26,7 +26,6 @@
       [last_Call-ID:]
       [last_CSeq:]
       Contact: client1 <sip:client1@[local_ip]:[local_port];transport=[transport]>
-      Content-Type: application/sdp
       Content-Length: 0
 
     ]]>
