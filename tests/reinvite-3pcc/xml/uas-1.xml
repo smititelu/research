@@ -2,15 +2,22 @@
 <!DOCTYPE scenario SYSTEM "sipp.dtd">
 
 <!--    UAC wlan0          <==== UAS Controller ====>          UAC wlan1     -->
-<!--     client0           server0            server1           client1      -->
+<!--     server0           server0            server1           server1      -->
 <!--        |.................|..................|.................|         -->
 <!--        | <== SIP/RTP ==> | <== commands ==> | <== SIP/RTP ==> |         -->
 <!--        |......................................................|         -->
 
 <scenario name="3PCC server1 side">
+  <!-- 3pcc server1 user variables to measure handover time -->
+  <User variables="start_sec,start_msec,stop_sec,stop_msec" />
+
+
+
 
   <!-- 3pcc server1 receives command to start simulate handover trigger -->
   <recvCmd crlf="true"> </recvCmd>
+
+
 
 
   <!-- 3pcc server1 sends request to trigger handover -->
@@ -36,8 +43,17 @@
   <recv response="200" crlf="true"> </recv>
 
 
+
+
   <!-- 3pcc server1 receives handover INVITE -->
   <recv request="INVITE"> </recv>
+
+  <!-- 3pcc server1 starts handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="start_sec,start_msec" />
+    </action>
+  </nop>
 
   <send>
     <![CDATA[
@@ -65,6 +81,18 @@
 
   <recv request="ACK" crlf="true"> </recv>
 
+  <!-- 3pcc server1 stops handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="stop_sec,stop_msec" />
+      <subtract assign_to="stop_sec" variable="start_sec" />
+      <subtract assign_to="stop_msec" variable="start_msec" />
+      <exec command="echo [$stop_sec] [$stop_msec] >> reinvite-3pcc/time.out" />
+    </action>
+  </nop>
+
+
+
 
   <!-- 3pcc server1 starts RTP media -->
   <nop>
@@ -74,12 +102,16 @@
   </nop>
 
 
+
+
   <!-- 3pcc server1 sends command -->
   <sendCmd crlf="true">
     <![CDATA[
       Call-ID: [call_id]
     ]]>
   </sendCmd>
+
+
 
 
   <!-- 3pcc server1 receives BYE -->
@@ -101,6 +133,8 @@
   </send>
 
 
+
+
   <!-- 3pcc server1 sends command to terminate scenario -->
   <sendCmd crlf="true">
     <![CDATA[
@@ -109,7 +143,12 @@
   </sendCmd>
 
 
+
+
   <!-- pause to capture complete traffic -->
   <pause milliseconds="1000" crlf="true"/>
+
+
+
 
 </scenario>

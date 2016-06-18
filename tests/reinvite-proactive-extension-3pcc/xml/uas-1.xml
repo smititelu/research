@@ -8,9 +8,16 @@
 <!--        |......................................................|         -->
 
 <scenario name="3PCC server1 side">
+  <!-- 3pcc server1 user variables to measure handover time -->
+  <User variables="start_sec,start_msec,stop_sec,stop_msec" />
+
+
+
 
   <!-- 3pcc server1 receives command that will trigger handover -->
   <recvCmd crlf="true"> </recvCmd>
+
+
 
 
   <!-- 3pcc server1 sends request to trigger handover -->
@@ -36,8 +43,17 @@
   <recv response="200" crlf="true"> </recv>
 
 
+
+
   <!-- 3pcc server1 receives handover INVITE -->
   <recv request="INVITE"> </recv>
+
+  <!-- 3pcc server1 starts handover timers -->
+  <nop crlf="true">
+    <action>
+      <gettimeofday assign_to="start_sec,start_msec" />
+    </action>
+  </nop>
 
   <send>
     <![CDATA[
@@ -65,17 +81,23 @@
 
   <recv request="ACK" crlf="true"> </recv>
 
-
-  <!-- 3pcc server1 starts RTP media -->
+  <!-- 3pcc server1 stops handover timers -->
   <nop crlf="true">
     <action>
-      <exec play_pcap_audio="reinvite-proactive-extension-3pcc/xml/g711a.pcap"/>
+      <gettimeofday assign_to="stop_sec,stop_msec" />
+      <subtract assign_to="stop_sec" variable="start_sec" />
+      <subtract assign_to="stop_msec" variable="start_msec" />
+      <exec command="echo [$stop_sec] [$stop_msec] >> reinvite-proactive-extension-3pcc/time.out" />
     </action>
   </nop>
 
 
+
+
   <!-- pause to capture some RTP media -->
   <pause milliseconds="500" crlf="true"/>
+
+
 
 
   <!-- 3pcc server1 sends command that triggered handover -->
@@ -86,8 +108,12 @@
   </sendCmd>
 
 
+
+
   <!-- 3pcc server1 receives command that will end scenario -->
   <recvCmd crlf="true"> </recvCmd>
+
+
 
 
   <!-- 3pcc server1 sends BYE -->
@@ -111,7 +137,12 @@
   <recv response="200" crlf="true"> </recv>
 
 
+
+
   <!-- pause to capture complete traffic -->
   <pause milliseconds="1000" crlf="true"/>
+
+
+
 
 </scenario>

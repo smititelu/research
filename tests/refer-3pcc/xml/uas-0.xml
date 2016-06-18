@@ -9,6 +9,15 @@
 
 <scenario name="3PCC server0 side">
 
+
+
+
+  <!-- 3pcc client0 user variables to measure handover time -->
+  <User variables="start_sec,start_msec,stop_sec,stop_msec" />
+
+
+
+
   <!-- 3pcc server0 receives INVITE -->
   <recv request="INVITE"> </recv>
 
@@ -39,6 +48,8 @@
   <recv request="ACK" crlf="true"> </recv>
 
 
+
+
   <!-- 3pcc server0 starts RTP media -->
   <nop>
     <action>
@@ -47,8 +58,12 @@
   </nop>
 
 
+
+
   <!-- 3pcc server0 pause to receive RTP media -->
   <pause milliseconds="500" crlf="true"/>
+
+
 
 
   <!-- 3pcc server0 triggers handover -->
@@ -74,6 +89,8 @@
   <recv response="200" crlf="true"> </recv>
 
 
+
+
   <!-- 3pcc server0 receives REFER -->
   <recv request="REFER"> </recv>
 
@@ -93,6 +110,14 @@
   </send>
 
 
+
+  <!-- 3pcc client0 starts handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="start_sec,start_msec" />
+    </action>
+  </nop>
+
   <!-- 3pcc server0 sends NOTIFY -->
   <send>
     <![CDATA[
@@ -115,6 +140,18 @@
   </send>
 
   <recv response="200" crlf="true"> </recv>
+
+  <!-- 3pcc client0 stops handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="stop_sec,stop_msec" />
+      <subtract assign_to="stop_sec" variable="start_sec" />
+      <subtract assign_to="stop_msec" variable="start_msec" />
+      <exec command="echo [$stop_sec] [$stop_msec] >> refer-3pcc/time.out" />
+    </action>
+  </nop>
+
+
 
 
   <!-- 3pcc server0 sends command -->
@@ -125,8 +162,14 @@
   </sendCmd>
 
 
+
+
+
   <!-- 3pcc server0 receives command -->
   <recvCmd crlf="true"> </recvCmd>
+
+
+
 
 
   <!-- 3pcc server0 sends NOTIFY -->
@@ -153,8 +196,12 @@
   <recv response="200" crlf="true"> </recv>
 
 
+
+
   <!-- 3pcc server0 pause to to have some RTP media before BYE -->
   <pause milliseconds="500"/>
+
+
 
 
   <!-- 3pcc server0 sends BYE -->
@@ -176,6 +223,8 @@
   </send>
 
 
+
+
   <!-- 3pcc server0 sends command -->
   <sendCmd crlf="true">
     <![CDATA[
@@ -184,11 +233,18 @@
   </sendCmd>
 
 
+
+
   <!-- 3pcc server0 receives command -->
   <recvCmd crlf="true"> </recvCmd>
 
 
+
+
   <!-- pause to capture complete traffic -->
   <pause milliseconds="1000" crlf="true"/>
+
+
+
 
 </scenario>

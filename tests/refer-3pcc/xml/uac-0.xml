@@ -9,8 +9,14 @@
 
 <scenario name="3PCC client0 side">
 
+
+
+
   <!-- 3pcc client0 user variables to measure handover time -->
   <User variables="start_sec,start_msec,stop_sec,stop_msec" />
+
+
+
 
 
   <!-- 3pcc client0 sends INVITE -->
@@ -66,6 +72,8 @@
   </send>
 
 
+
+
   <!-- 3pcc client0 receives handover trigger -->
   <recv request="OPTIONS"> </recv>
 
@@ -94,13 +102,14 @@
   </send>
 
 
+
+
   <!-- 3pcc client0 starts handover timers -->
   <nop>
     <action>
       <gettimeofday assign_to="start_sec,start_msec" />
     </action>
   </nop>
-
 
   <!-- 3pcc client0 sends REFER -->
   <send>
@@ -124,6 +133,18 @@
 
   <recv response="202" crlf="true"> </recv>
 
+  <!-- 3pcc client0 stops handover timers -->
+  <nop>
+    <action>
+      <gettimeofday assign_to="stop_sec,stop_msec" />
+      <subtract assign_to="stop_sec" variable="start_sec" />
+      <subtract assign_to="stop_msec" variable="start_msec" />
+      <exec command="echo [$stop_sec] [$stop_msec] >> refer-3pcc/time.out" />
+    </action>
+  </nop>
+
+
+
 
   <!-- 3pcc client0 receives NOTIFY -->
   <recv request="NOTIFY"> </recv>
@@ -142,6 +163,8 @@
 
     ]]>
   </send>
+
+
 
 
   <!-- 3pcc client0 receives second NOTIFY -->
@@ -163,19 +186,12 @@
   </send>
 
 
-  <!-- 3pcc client0 stops handover timers -->
-  <nop>
-    <action>
-      <gettimeofday assign_to="stop_sec,stop_msec" />
-      <subtract assign_to="stop_sec" variable="start_sec" />
-      <subtract assign_to="stop_msec" variable="start_msec" />
-      <exec command="echo [$stop_sec] [$stop_msec] >> refer-3pcc/time.out" />
-    </action>
-  </nop>
 
 
   <!-- 3pcc client0 pause to to have some RTP media before BYE -->
   <pause milliseconds="1000"/>
+
+
 
 
   <!-- 3pcc client0 sends BYE -->
@@ -199,7 +215,12 @@
   <recv response="200" crlf="true"> </recv>
 
 
+
+
   <!-- pause to capture complete traffic -->
   <pause milliseconds="1000" crlf="true"/>
+
+
+
 
 </scenario>

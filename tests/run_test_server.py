@@ -205,3 +205,7 @@ else:
 	# wait for sipp scenario to stop
 	while helps.is_process_running("sipp_uas"):
 		1;
+
+# start processing results
+p = helps.start_callresult(test_name, test_title)
+p.wait()
